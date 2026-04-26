@@ -67,16 +67,16 @@ export default function Parcours() {
                 <br />
                 étape de
                 <br />
-                <em>votre projet</em>
+                <em>ton projet</em>
               </h2>
             </Reveal>
           </div>
           <Reveal delay={0.2}>
             <p className="text-[15px] text-muted leading-[1.88]">
               Chez Finox, on s&apos;adapte à{" "}
-              <strong className="text-cream font-medium">votre réalité</strong>{" "}
-              — pas l&apos;inverse. Que vous achetiez une maison, lanciez votre
-              entreprise ou fondiez une famille, on est là à chaque point de
+              <strong className="text-cream font-medium">ta réalité</strong>{" "}
+              — pas l&apos;inverse. Que tu achètes une maison, lances ton
+              entreprise ou fondes une famille, on est là à chaque point de
               contact.
             </p>
           </Reveal>
@@ -148,18 +148,13 @@ export default function Parcours() {
             />
             <div className={`grid ${gridCols} gap-0 relative max-[980px]:grid-cols-2`}>
               {current.steps.map((step, i) => {
-                const isDown = i % 2 === 1;
                 return (
                   <motion.div
                     key={`${selected}-${step.num}`}
                     initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: shouldReduceMotion ? 0 : i * 0.08 }}
-                    className={`flex flex-col items-center px-2 relative group max-[980px]:flex-col ${
-                      isDown
-                        ? "flex-col-reverse max-[980px]:flex-col"
-                        : "flex-col"
-                    }`}
+                    className="flex flex-col items-center px-2 relative group"
                   >
                     <div className="flex flex-col items-center w-full">
                       <span className="font-display text-[9px] tracking-[0.18em] text-gold mb-2">
@@ -171,7 +166,7 @@ export default function Parcours() {
                       />
                       <div
                         data-hover
-                        className="bg-navy-50 border border-gold/10 p-5 px-4 w-full transition-all duration-300 relative overflow-hidden text-left group-hover:bg-navy-100 group-hover:border-gold/30 group-hover:-translate-y-0.5"
+                        className="bg-navy-50 border border-gold/10 p-5 px-4 w-full h-full flex flex-col transition-all duration-300 relative overflow-hidden text-left group-hover:bg-navy-100 group-hover:border-gold/30 group-hover:-translate-y-0.5"
                       >
                         <div className="absolute top-0 left-0 right-0 h-0.5 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500 bg-gradient-to-r from-gold to-gold-dark" aria-hidden="true" />
                         <span className="text-xl mb-2.5 block filter saturate-0 brightness-150 group-hover:saturate-100 transition-all" aria-hidden="true">

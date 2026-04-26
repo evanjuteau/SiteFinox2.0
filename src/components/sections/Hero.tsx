@@ -122,12 +122,20 @@ export default function Hero() {
           className="flex gap-4 justify-center flex-wrap"
         >
           <Link href="/contact" className="btn-gold">
-            Prendre rendez-vous
+            Parle à l&apos;équipe
           </Link>
           <Link href="/services#parcours" className="btn-outline">
             Mon parcours de vie →
           </Link>
         </motion.div>
+
+        <motion.p
+          {...appear(0.9, shouldReduceMotion)}
+          className="text-xs text-muted mt-5 max-w-[380px]"
+        >
+          Pas de centre d&apos;appel. Pas de robot. Tu parles directement à
+          nous — du vrai monde qui connaît ton dossier.
+        </motion.p>
 
         <motion.p
           initial={shouldReduceMotion ? false : { opacity: 0 }}

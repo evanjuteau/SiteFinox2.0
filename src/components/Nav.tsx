@@ -106,7 +106,7 @@ export default function Nav() {
           href="/contact"
           className="text-[11px] font-medium tracking-[0.16em] uppercase text-navy bg-gold px-7 py-3 transition-all border border-gold hover:bg-transparent hover:text-gold max-[980px]:hidden"
         >
-          Nous joindre
+          Parle à l&apos;équipe
         </Link>
 
         <button
@@ -168,7 +168,7 @@ export default function Nav() {
               transition={{ delay: shouldReduceMotion ? 0 : links.length * 0.05 }}
             >
               <Link href="/contact" className="btn-gold">
-                Nous joindre
+                Parle à l&apos;équipe
               </Link>
             </motion.div>
           </motion.div>

@@ -8,6 +8,7 @@ import Footer from "@/components/Footer";
 import FloatingWidget from "@/components/FloatingWidget";
 import {
   defaultOgImage,
+  faqJsonLd,
   localBusinessJsonLd,
   organizationJsonLd,
   siteUrl,
@@ -114,7 +115,7 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify([organizationJsonLd, localBusinessJsonLd]),
+            __html: JSON.stringify([organizationJsonLd, localBusinessJsonLd, faqJsonLd]),
           }}
         />
         <SmoothScrollProvider>

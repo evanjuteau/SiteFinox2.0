@@ -77,7 +77,7 @@ export default function FloatingWidget() {
             className="bg-navy-100 border border-gold/30 px-6 py-5 max-w-[280px] shadow-[0_20px_60px_rgba(0,0,0,0.5)]"
           >
             <div className="font-serif text-base font-bold text-cream mb-4 leading-snug">
-              Quel est votre prochain projet?
+              Ton prochain projet, c'est quoi?
             </div>
             <div className="grid grid-cols-2 gap-2">
               {projectKeys.map((key) => {

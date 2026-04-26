@@ -15,7 +15,7 @@ const nodes = [
 
 const cx = 500;
 const cy = 260;
-const r = 195;
+const r = 220;
 
 type Node = (typeof nodes)[number];
 
@@ -73,15 +73,15 @@ export default function Reseau() {
                 <br />
                 avec soin,
                 <br />
-                <em>pour vous</em>
+                <em>pour toi</em>
               </h2>
             </Reveal>
           </div>
           <Reveal delay={0.2}>
             <p className="text-[15px] text-muted leading-[1.85]">
               Chaque partenaire de notre réseau a été choisi pour une raison
-              précise — pas par défaut. Survolez les nœuds pour découvrir leur
-              rôle dans votre accompagnement.
+              précise — pas par défaut. Survole les nœuds pour découvrir leur
+              rôle dans ton accompagnement.
             </p>
           </Reveal>
         </div>
@@ -154,6 +154,7 @@ export default function Reseau() {
                     style={{ cursor: "pointer" }}
                     onMouseEnter={(e) => handleEnter(node, e)}
                     onMouseMove={placeTooltipFromMouse}
+                    onMouseLeave={() => setHover(null)}
                     onFocus={() => handleFocus(node)}
                     onBlur={() => setHover(null)}
                     onKeyDown={(e) => handleNodeKey(e, node)}
@@ -161,27 +162,27 @@ export default function Reseau() {
                     <circle
                       cx={point.x}
                       cy={point.y}
-                      r="40"
-                      fill={isHover ? "rgba(212,168,67,0.12)" : "#0C1220"}
+                      r="56"
+                      fill={isHover ? "rgba(212,168,67,0.14)" : "#0C1220"}
                       stroke="#D4A843"
-                      strokeWidth={isHover ? 2 : 1}
+                      strokeWidth={isHover ? 2.5 : 1.2}
                       style={{ transition: "all 0.3s" }}
                     />
                     <circle
                       cx={point.x}
                       cy={point.y}
-                      r="34"
+                      r="48"
                       fill="rgba(212,168,67,0.05)"
                       stroke="#D4A843"
-                      strokeWidth="0.3"
+                      strokeWidth="0.4"
                     />
                     <text
                       x={point.x}
-                      y={point.y + 1}
+                      y={point.y + 2}
                       textAnchor="middle"
                       dominantBaseline="middle"
                       fill="#D4A843"
-                      fontSize="13"
+                      fontSize="18"
                       fontFamily="Inter, sans-serif"
                       fontWeight="600"
                     >
@@ -191,10 +192,10 @@ export default function Reseau() {
                 );
               })}
 
-              <circle cx={cx} cy={cy} r="70" fill="url(#centerGrad)" aria-hidden="true" />
-              <circle cx={cx} cy={cy} r="52" fill="#0C1220" stroke="#D4A843" strokeWidth="1.5" aria-hidden="true" />
-              <circle cx={cx} cy={cy} r="46" fill="#0C1220" stroke="#D4A843" strokeWidth="0.4" opacity="0.5" aria-hidden="true" />
-              <image href="/images/logo.png" x="430" y="230" width="140" height="60" preserveAspectRatio="xMidYMid meet" aria-hidden="true" />
+              <circle cx={cx} cy={cy} r="90" fill="url(#centerGrad)" aria-hidden="true" />
+              <circle cx={cx} cy={cy} r="70" fill="#0C1220" stroke="#D4A843" strokeWidth="1.8" aria-hidden="true" />
+              <circle cx={cx} cy={cy} r="62" fill="#0C1220" stroke="#D4A843" strokeWidth="0.4" opacity="0.5" aria-hidden="true" />
+              <image href="/images/logo.png" x="412" y="225" width="176" height="70" preserveAspectRatio="xMidYMid meet" aria-hidden="true" />
             </svg>
 
             {hover && (

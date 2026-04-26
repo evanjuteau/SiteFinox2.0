@@ -1,22 +1,23 @@
+import Image from "next/image";
 import Reveal from "@/components/ui/Reveal";
 
 const team = [
   {
-    init: "EJL",
+    photo: "/images/team-evan.png",
     role: "Associé & Courtier Senior",
     name: "Evan Juteau Lapierre",
     title: "Assurance & Croissance",
     bio: "La tête derrière la vision Finox. Spécialiste en acquisition client, stratégies numériques et développement d'affaires. L'énergie du cabinet.",
   },
   {
-    init: "DM",
+    photo: "/images/team-dany.png",
     role: "Associé & Courtier Hypothécaire",
     name: "Dany Michaud",
     title: "Financement & Stratégie",
     bio: "L'expérience du cabinet. Expert en financement hypothécaire et stratégies complexes. La mémoire institutionnelle de Finox.",
   },
   {
-    init: "É",
+    photo: "/images/team-etienne.png",
     role: "Directeur Développement & Planification",
     name: "Étienne",
     title: "Relations, Expansion & Planification financière",
@@ -57,20 +58,27 @@ export default function Equipe() {
 
         <div className="grid grid-cols-3 gap-px bg-gold/10 max-[980px]:grid-cols-1">
           {team.map((m, i) => (
-            <Reveal key={m.init} delay={i * 0.1}>
+            <Reveal key={m.name} delay={i * 0.1}>
               <div
                 data-hover
-                className="bg-navy p-11 px-8 h-full transition-all duration-300 relative overflow-hidden group hover:bg-gold/[0.03]"
+                className="bg-navy p-11 px-8 h-full flex flex-col transition-all duration-300 relative overflow-hidden group hover:bg-gold/[0.03]"
               >
                 <div
                   className="absolute top-0 left-0 right-0 h-0.5 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"
+                  aria-hidden="true"
                   style={{
                     background:
                       "linear-gradient(90deg, var(--gold), var(--gold-dark))",
                   }}
                 />
-                <div className="w-15 h-15 rounded-full border border-gold/25 bg-gold/[0.06] flex items-center justify-center font-serif text-xl font-bold text-gold mb-6">
-                  {m.init}
+                <div className="relative w-32 h-32 rounded-full overflow-hidden border-2 border-gold/30 mb-7 transition-all duration-500 group-hover:border-gold group-hover:shadow-[0_0_24px_rgba(212,168,67,0.3)]">
+                  <Image
+                    src={m.photo}
+                    alt={`${m.name}, ${m.role}`}
+                    width={256}
+                    height={256}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <p className="text-[9px] tracking-[0.2em] uppercase text-gold mb-3.5">
                   {m.role}

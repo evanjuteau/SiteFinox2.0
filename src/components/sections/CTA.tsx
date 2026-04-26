@@ -59,7 +59,7 @@ export default function CTA() {
         </p>
       </Reveal>
       <Reveal delay={0.3}>
-        <div className="flex gap-4 justify-center mb-20 flex-wrap relative z-10">
+        <div className="flex gap-4 justify-center mb-4 flex-wrap relative z-10">
           <a href="mailto:service@finox.ca" className="btn-gold">
             {content.mainBtn}
           </a>
@@ -67,6 +67,9 @@ export default function CTA() {
             438-258-7666
           </a>
         </div>
+        <p className="text-[11px] tracking-[0.18em] uppercase text-center mb-20 relative z-10" style={{ color: "rgba(212,168,67,0.65)" }}>
+          Cabinet de services financiers inscrit à l&apos;AMF du Québec
+        </p>
       </Reveal>
       <Reveal delay={0.4}>
         <div className="flex border border-gold/15 max-w-[800px] mx-auto relative z-10 max-[980px]:flex-col">

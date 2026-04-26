@@ -41,7 +41,7 @@ export default function VsBank() {
             <h2 className="section-heading text-[clamp(36px,5vw,68px)] mb-5">
               Pourquoi pas
               <br />
-              <em>votre banque?</em>
+              <em>ta banque?</em>
             </h2>
             <p className="text-[15px] text-muted max-w-[520px] mx-auto leading-[1.8]">
               Bonne question. Voici la réponse honnête — sans attaquer
@@ -56,7 +56,7 @@ export default function VsBank() {
               <div className="px-9 py-7 border border-white/5 border-b-0 bg-white/[0.02] flex items-center gap-3.5">
                 <div>
                   <div className="font-serif text-xl font-bold text-muted">
-                    Votre conseiller bancaire
+                    Ton conseiller bancaire
                   </div>
                   <div className="text-[11px] tracking-[0.12em] uppercase text-muted-dark mt-1">
                     Le modèle traditionnel
