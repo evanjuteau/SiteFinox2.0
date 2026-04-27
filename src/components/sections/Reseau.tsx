@@ -89,7 +89,7 @@ export default function Reseau() {
         <Reveal>
           <div
             ref={wrapRef}
-            className="relative w-full max-w-[900px] mx-auto aspect-[1000/520] max-[980px]:aspect-[3/4]"
+            className="relative w-full max-w-[900px] mx-auto aspect-[1000/520] max-[980px]:hidden"
             onMouseLeave={() => setHover(null)}
           >
             <svg
@@ -221,6 +221,53 @@ export default function Reseau() {
             )}
           </div>
         </Reveal>
+
+        {/* Mobile-only: cards en grille au lieu de la constellation */}
+        <div className="hidden max-[980px]:block">
+          <Reveal>
+            <div className="flex items-center justify-center gap-4 mb-10">
+              <div className="h-px flex-1 bg-gold/15" />
+              <div className="w-16 h-16 rounded-full bg-navy-100 border border-gold/40 flex items-center justify-center shadow-[0_0_20px_rgba(212,168,67,0.2)] shrink-0">
+                <span className="font-serif text-[15px] font-bold text-gold tracking-wider">
+                  Finox
+                </span>
+              </div>
+              <div className="h-px flex-1 bg-gold/15" />
+            </div>
+            <p className="text-center text-[10px] tracking-[0.22em] uppercase text-muted-dark mb-7">
+              Au cœur d&apos;un réseau de 6 partenaires
+            </p>
+          </Reveal>
+          <div className="grid grid-cols-2 gap-3 max-[480px]:grid-cols-1">
+            {nodes.map((node, i) => (
+              <Reveal key={node.id} delay={i * 0.05}>
+                <div className="bg-navy-50 border border-gold/15 p-5 h-full flex flex-col">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-11 h-11 rounded-full bg-gold/[0.08] border border-gold/30 flex items-center justify-center shrink-0">
+                      <span className="text-[15px] font-semibold text-gold">
+                        {node.label}
+                      </span>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-[8px] tracking-[0.22em] uppercase text-gold mb-0.5">
+                        {node.cat}
+                      </p>
+                      <h3 className="font-serif text-[15px] font-bold text-cream leading-tight">
+                        {node.name}
+                      </h3>
+                    </div>
+                  </div>
+                  <p className="text-[12px] text-muted leading-[1.6] mb-2">
+                    {node.desc}
+                  </p>
+                  <p className="text-[10px] text-gold-dark italic mt-auto pt-2 border-t border-gold/10">
+                    Quand : {node.when}
+                  </p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   );
