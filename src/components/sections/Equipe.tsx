@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Reveal from "@/components/ui/Reveal";
+import Link from "next/link";
 
 const team = [
   {
@@ -61,39 +62,58 @@ export default function Equipe() {
             <Reveal key={m.name} delay={i * 0.1}>
               <div
                 data-hover
-                className="bg-navy p-11 px-8 h-full flex flex-col transition-all duration-300 relative overflow-hidden group hover:bg-gold/[0.03]"
+                className="bg-navy h-full flex flex-col transition-all duration-300 relative overflow-hidden group hover:bg-gold/[0.03]"
               >
-                <div
-                  className="absolute top-0 left-0 right-0 h-0.5 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"
-                  aria-hidden="true"
-                  style={{
-                    background:
-                      "linear-gradient(90deg, var(--gold), var(--gold-dark))",
-                  }}
-                />
-                <div className="relative w-32 h-32 rounded-full overflow-hidden border-2 border-gold/30 mb-7 transition-all duration-500 group-hover:border-gold group-hover:shadow-[0_0_24px_rgba(212,168,67,0.3)]">
+                <div className="relative w-full aspect-[4/5] overflow-hidden">
                   <Image
                     src={m.photo}
                     alt={`${m.name}, ${m.role}`}
-                    width={256}
-                    height={256}
-                    className="w-full h-full object-cover"
+                    fill
+                    sizes="(max-width: 980px) 100vw, 33vw"
+                    className="object-cover object-top transition-transform duration-700 group-hover:scale-[1.04]"
+                  />
+                  <div
+                    className="absolute inset-0"
+                    style={{
+                      background:
+                        "linear-gradient(to top, rgba(8,12,20,0.7) 0%, rgba(8,12,20,0.2) 40%, transparent 70%)",
+                    }}
+                    aria-hidden="true"
+                  />
+                  <div
+                    className="absolute bottom-0 left-0 right-0 h-0.5 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-600"
+                    aria-hidden="true"
+                    style={{
+                      background:
+                        "linear-gradient(90deg, var(--gold), var(--gold-dark))",
+                    }}
                   />
                 </div>
-                <p className="text-[9px] tracking-[0.2em] uppercase text-gold mb-3.5">
-                  {m.role}
-                </p>
-                <h3 className="font-serif text-[21px] font-bold text-cream mb-1 leading-tight">
-                  {m.name}
-                </h3>
-                <p className="text-xs text-muted italic mb-4">{m.title}</p>
-                <p className="text-[13px] text-muted-dark leading-[1.82]">
-                  {m.bio}
-                </p>
+
+                <div className="p-9 px-8 flex flex-col flex-1">
+                  <p className="text-[9px] tracking-[0.2em] uppercase text-gold mb-3">
+                    {m.role}
+                  </p>
+                  <h3 className="font-serif text-[22px] font-bold text-cream mb-1 leading-tight">
+                    {m.name}
+                  </h3>
+                  <p className="text-xs text-muted italic mb-5">{m.title}</p>
+                  <p className="text-[13px] text-muted-dark leading-[1.82] flex-1">
+                    {m.bio}
+                  </p>
+                </div>
               </div>
             </Reveal>
           ))}
         </div>
+
+        <Reveal delay={0.3}>
+          <div className="mt-14 text-center">
+            <Link href="/equipe" className="btn-outline">
+              Rencontrer l&apos;équipe →
+            </Link>
+          </div>
+        </Reveal>
       </div>
     </section>
   );

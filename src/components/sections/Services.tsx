@@ -2,13 +2,13 @@ import Reveal from "@/components/ui/Reveal";
 import Link from "next/link";
 
 const services = [
-  { n: "01", name: "Assurance vie & invalidité", tags: ["Individuel", "Corporatif", "Clé-homme"] },
-  { n: "02", name: "Assurance collective", tags: ["PME", "Groupes"] },
-  { n: "03", name: "Planification successorale", tags: ["Fiducie", "Holdco", "Transfert"] },
-  { n: "04", name: "Investissement & épargne", tags: ["REER", "CELI", "CELIAPP"] },
-  { n: "05", name: "Assurance voyage", tags: ["Manulife", "TuGo", "iA"] },
-  { n: "06", name: "Stratégies corporatives", tags: ["Vie participante", "Convention actionnaires"] },
-  { n: "07", name: "Financement hypothécaire", tags: ["+50 prêteurs", "Résidentiel", "Commercial"] },
+  { n: "01", name: "Assurance vie & invalidité", desc: "Protection personnalisée, indépendante de ton employeur. Portable à vie.", tags: ["Individuel", "Corporatif", "Clé-homme"] },
+  { n: "02", name: "Assurance collective", desc: "Avantages compétitifs pour tes employés — sans surprises dans les petits caractères.", tags: ["PME", "Groupes"] },
+  { n: "03", name: "Planification successorale", desc: "Fiducie, Holdco, transfert d'actifs — on coordonne avec ton notaire et CPA.", tags: ["Fiducie", "Holdco", "Transfert"] },
+  { n: "04", name: "Investissement & épargne", desc: "Accès au vrai marché, pas juste les fonds maison de ta banque.", tags: ["REER", "CELI", "CELIAPP"] },
+  { n: "05", name: "Assurance voyage", desc: "Couverture complète avec les meilleurs assureurs — Manulife, TuGo, iA.", tags: ["Manulife", "TuGo", "iA"] },
+  { n: "06", name: "Stratégies corporatives", desc: "Vie participante, convention d'actionnaires — vision long terme pour l'entrepreneur.", tags: ["Vie participante", "Convention actionnaires"] },
+  { n: "07", name: "Financement hypothécaire", desc: "On magasine parmi +50 prêteurs. Résidentiel, commercial, refinancement.", tags: ["+50 prêteurs", "Résidentiel", "Commercial"] },
 ];
 
 export default function Services() {
@@ -56,10 +56,13 @@ export default function Services() {
                     {s.n}
                   </span>
                   <div className="flex-1">
-                    <div className="font-serif text-[22px] font-bold text-cream group-hover:text-gold transition-colors mb-1">
+                    <div className="font-serif text-[22px] font-bold text-cream group-hover:text-gold transition-colors mb-1.5">
                       {s.name}
                     </div>
-                    <div className="flex flex-wrap gap-1.5 mt-1.5">
+                    <p className="text-[13px] text-muted leading-[1.6] mb-3">
+                      {s.desc}
+                    </p>
+                    <div className="flex flex-wrap gap-1.5">
                       {s.tags.map((t) => (
                         <span
                           key={t}

@@ -32,26 +32,50 @@ export default function Testimonials() {
         <Reveal>
           <p className="sec-eyebrow">08 — Ce qu&apos;ils en disent</p>
         </Reveal>
-        <div className="grid grid-cols-3 gap-6 mt-6 max-[980px]:grid-cols-1">
+        <div className="grid grid-cols-3 gap-6 mt-10 max-[980px]:grid-cols-1">
           {testimonials.map((t, i) => (
             <Reveal key={t.name} delay={i * 0.1}>
               <div
                 data-hover
-                className="bg-navy border border-gold/10 p-11 px-9 relative transition-all duration-300 hover:border-gold/30 hover:-translate-y-1 h-full"
+                className="relative flex flex-col h-full transition-all duration-400 hover:-translate-y-1.5 group"
+                style={{
+                  background: "linear-gradient(135deg, rgba(17,24,41,1) 0%, rgba(12,18,32,1) 100%)",
+                  boxShadow: "0 0 0 1px rgba(212,168,67,0.08), 0 24px 48px rgba(0,0,0,0.25)",
+                }}
               >
-                <div className="font-display text-7xl text-gold/15 leading-[0.8] mb-2" aria-hidden="true">
-                  &ldquo;
+                <div
+                  className="absolute top-0 left-0 right-0 h-px origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"
+                  aria-hidden="true"
+                  style={{ background: "linear-gradient(90deg, transparent, var(--gold), transparent)" }}
+                />
+                <div
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                  aria-hidden="true"
+                  style={{ boxShadow: "inset 0 0 0 1px rgba(212,168,67,0.18)" }}
+                />
+
+                <div className="p-11 px-9 flex flex-col flex-1">
+                  <div className="font-display text-[88px] text-gold/20 leading-[0.75] mb-3 select-none" aria-hidden="true">
+                    &ldquo;
+                  </div>
+                  <div className="flex items-center gap-1 mb-5">
+                    {Array.from({ length: 5 }).map((_, k) => (
+                      <svg key={k} viewBox="0 0 12 12" className="w-3 h-3 fill-gold" aria-hidden="true">
+                        <path d="M6 0l1.5 4.5H12L8.25 7.5l1.5 4.5L6 9.75 2.25 12l1.5-4.5L0 4.5h4.5z" />
+                      </svg>
+                    ))}
+                    <span className="sr-only">5 étoiles sur 5</span>
+                  </div>
+                  <p className="font-serif text-[17px] italic text-cream-dim leading-[1.68] mb-8 flex-1">
+                    {t.text}
+                  </p>
+                  <div className="pt-5 border-t border-gold/10">
+                    <p className="text-[13px] font-semibold text-cream mb-0.5 tracking-wide">
+                      {t.name}
+                    </p>
+                    <p className="text-[11px] text-muted">{t.from}</p>
+                  </div>
                 </div>
-                <div className="text-gold text-xs tracking-[3px] mb-4" aria-label="5 étoiles sur 5">
-                  ★★★★★
-                </div>
-                <p className="font-serif text-[17px] italic text-cream-dim leading-[1.65] mb-7">
-                  {t.text}
-                </p>
-                <p className="text-xs font-semibold text-cream mb-1 tracking-wide">
-                  {t.name}
-                </p>
-                <p className="text-[11px] text-muted italic">{t.from}</p>
               </div>
             </Reveal>
           ))}

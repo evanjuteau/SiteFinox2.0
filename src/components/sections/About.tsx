@@ -108,7 +108,7 @@ export default function About() {
                       "linear-gradient(90deg, var(--gold), var(--gold-dark))",
                   }}
                 />
-                <span className="block font-display text-[52px] text-gold/10 leading-none mb-4">
+                <span className="block font-display text-[52px] text-gold/[0.18] leading-none mb-4 transition-colors duration-300 group-hover:text-gold/[0.35]">
                   {p.n}
                 </span>
                 <h3 className="font-serif text-[19px] font-bold text-cream mb-2.5">

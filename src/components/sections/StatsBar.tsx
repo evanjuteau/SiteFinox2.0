@@ -31,12 +31,12 @@ export default function StatsBar() {
                 "linear-gradient(90deg, transparent, var(--gold), transparent)",
             }}
           />
-          <span className="block font-serif text-[46px] font-black text-cream leading-none">
+          <span className="block font-display text-[68px] text-cream leading-none tracking-wide">
             {s.prefix && <em className="not-italic text-gold">{s.prefix}</em>}
             {s.n}
             {s.suffix && <em className="not-italic text-gold">{s.suffix}</em>}
           </span>
-          <span className="block text-[10px] tracking-[0.2em] uppercase text-muted mt-2">
+          <span className="block text-[10px] tracking-[0.22em] uppercase text-muted mt-1.5">
             {s.label}
           </span>
         </motion.div>
