@@ -6,11 +6,11 @@ import Reveal from "@/components/ui/Reveal";
 
 const nodes = [
   { id: "cpa", label: "CPA", name: "Comptables partenaires", cat: "Fiscalité", desc: "Stratégies fiscales intégrées et optimisation corporative.", when: "Incorporation, planification retraite, Holdco", angle: 300 },
-  { id: "notaire", label: "⚖️", name: "Notaires & avocats", cat: "Droit", desc: "Conventions, testaments, fiducies, actes hypothécaires.", when: "Achat de maison, succession, convention actionnaires", angle: 240 },
+  { id: "notaire", label: "JUR", name: "Notaires & avocats", cat: "Droit", desc: "Conventions, testaments, fiducies, actes hypothécaires.", when: "Achat de maison, succession, convention actionnaires", angle: 240 },
   { id: "gfs", label: "GFS", name: "Groupe Financier Signature", cat: "Immobilier", desc: "Opportunités immobilières résidentielles et commerciales.", when: "Achat de propriété, investissement immobilier", angle: 180 },
-  { id: "courtiers", label: "🏦", name: "Courtiers hypothécaires", cat: "Financement", desc: "+50 prêteurs. On trouve le vrai meilleur taux du marché.", when: "Achat maison, refinancement, projet immobilier", angle: 120 },
-  { id: "assureurs", label: "🛡️", name: "Assureurs multimarché", cat: "Assurance", desc: "Manulife, iA, CPP, Specialty Life, TuGo et plus encore.", when: "Toutes les situations — on magasine pour toi", angle: 60 },
-  { id: "planif", label: "📊", name: "Planificateurs certifiés", cat: "Planification", desc: "Pour les dossiers complexes qui demandent une vision globale.", when: "Retraite, planification successorale complexe", angle: 0 },
+  { id: "courtiers", label: "HYP", name: "Courtiers hypothécaires", cat: "Financement", desc: "+50 prêteurs. On trouve le vrai meilleur taux du marché.", when: "Achat maison, refinancement, projet immobilier", angle: 120 },
+  { id: "assureurs", label: "ASS", name: "Assureurs multimarché", cat: "Assurance", desc: "Manulife, iA, CPP, Specialty Life, TuGo et plus encore.", when: "Toutes les situations — on magasine pour toi", angle: 60 },
+  { id: "planif", label: "PLN", name: "Planificateurs certifiés", cat: "Planification", desc: "Pour les dossiers complexes qui demandent une vision globale.", when: "Retraite, planification successorale complexe", angle: 0 },
 ];
 
 const cx = 500;
@@ -178,13 +178,16 @@ export default function Reseau() {
                     />
                     <text
                       x={point.x}
-                      y={point.y + 2}
+                      y={point.y + 3}
                       textAnchor="middle"
                       dominantBaseline="middle"
                       fill="#D4A843"
-                      fontSize="18"
-                      fontFamily="Inter, sans-serif"
-                      fontWeight="600"
+                      fontSize="34"
+                      fontFamily="var(--font-bebas), Impact, sans-serif"
+                      fontWeight="400"
+                      letterSpacing="3"
+                      style={{ transition: "all 0.3s" }}
+                      opacity={isHover ? 1 : 0.92}
                     >
                       {node.label}
                     </text>
@@ -192,10 +195,33 @@ export default function Reseau() {
                 );
               })}
 
-              <circle cx={cx} cy={cy} r="90" fill="url(#centerGrad)" aria-hidden="true" />
-              <circle cx={cx} cy={cy} r="70" fill="#0C1220" stroke="#D4A843" strokeWidth="1.8" aria-hidden="true" />
-              <circle cx={cx} cy={cy} r="62" fill="#0C1220" stroke="#D4A843" strokeWidth="0.4" opacity="0.5" aria-hidden="true" />
-              <image href="/images/logo.png" x="412" y="225" width="176" height="70" preserveAspectRatio="xMidYMid meet" aria-hidden="true" />
+              <circle cx={cx} cy={cy} r="100" fill="url(#centerGrad)" aria-hidden="true" />
+              <circle cx={cx} cy={cy} r="78" fill="#0C1220" stroke="#D4A843" strokeWidth="1.8" aria-hidden="true" />
+              <circle cx={cx} cy={cy} r="70" fill="#0C1220" stroke="#D4A843" strokeWidth="0.4" opacity="0.5" aria-hidden="true" />
+              <text
+                x={cx}
+                y={cy + 6}
+                textAnchor="middle"
+                dominantBaseline="middle"
+                fill="#D4A843"
+                fontSize="42"
+                fontFamily="var(--font-bebas), Impact, sans-serif"
+                fontWeight="400"
+                letterSpacing="6"
+                aria-hidden="true"
+              >
+                FINOX
+              </text>
+              <line
+                x1={cx - 38}
+                y1={cy + 24}
+                x2={cx + 38}
+                y2={cy + 24}
+                stroke="#D4A843"
+                strokeOpacity="0.4"
+                strokeWidth="0.8"
+                aria-hidden="true"
+              />
             </svg>
 
             {hover && (

@@ -5,6 +5,7 @@ import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import Reveal from "@/components/ui/Reveal";
 import Link from "next/link";
 import { isProjectKey, projectKeys, projects, type ProjectKey } from "@/lib/projects";
+import { ProjectIcon } from "@/components/ui/IconMap";
 
 const gridClassByStepCount: Record<number, string> = {
   4: "grid-cols-4",
@@ -109,12 +110,12 @@ export default function Parcours() {
                     <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" aria-hidden="true" />
                   )}
                   <span
-                    className={`text-[22px] relative z-10 transition-transform ${
-                      isActive ? "scale-110" : ""
+                    className={`relative z-10 transition-all ${
+                      isActive ? "text-gold scale-110" : "text-muted"
                     }`}
                     aria-hidden="true"
                   >
-                    {project.icon}
+                    <ProjectIcon name={project.icon} size={26} />
                   </span>
                   <span
                     className={`text-[10px] font-medium tracking-[0.14em] uppercase relative z-10 transition-colors ${
@@ -169,8 +170,8 @@ export default function Parcours() {
                         className="bg-navy-50 border border-gold/10 p-5 px-4 w-full h-full flex flex-col transition-all duration-300 relative overflow-hidden text-left group-hover:bg-navy-100 group-hover:border-gold/30 group-hover:-translate-y-0.5"
                       >
                         <div className="absolute top-0 left-0 right-0 h-0.5 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500 bg-gradient-to-r from-gold to-gold-dark" aria-hidden="true" />
-                        <span className="text-xl mb-2.5 block filter saturate-0 brightness-150 group-hover:saturate-100 transition-all" aria-hidden="true">
-                          {step.icon}
+                        <span className="block mb-2.5 text-gold/70 group-hover:text-gold transition-colors" aria-hidden="true">
+                          <ProjectIcon name={step.icon} size={22} />
                         </span>
                         <h3 className="font-serif text-[13px] font-bold text-cream mb-1.5 leading-tight">
                           {step.title}

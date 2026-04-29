@@ -56,7 +56,13 @@ export default async function ArticlePage({ params }: Props) {
   const article = articles.find((item) => item.slug === slug);
   if (!article) notFound();
 
-  const otherArticles = articles.filter((item) => item.slug !== slug);
+  const sameTagArticles = articles
+    .filter((item) => item.slug !== slug && item.tag === article.tag)
+    .slice(0, 4);
+  const fallbackArticles = articles
+    .filter((item) => item.slug !== slug && !sameTagArticles.includes(item))
+    .slice(0, 4 - sameTagArticles.length);
+  const otherArticles = [...sameTagArticles, ...fallbackArticles];
   const articleUrl = `${siteUrl}/chronique/${article.slug}`;
   const articleJsonLd = {
     "@context": "https://schema.org",

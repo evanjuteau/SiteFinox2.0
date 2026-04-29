@@ -119,13 +119,31 @@ export default function Hero() {
 
         <motion.div
           {...appear(0.8, shouldReduceMotion)}
-          className="flex gap-4 justify-center flex-wrap"
+          className="flex gap-5 justify-center items-center flex-wrap"
         >
-          <Link href="/contact" className="btn-gold">
-            Parle à l&apos;équipe
+          <Link href="/contact" className="btn-gold btn-gold--xl group inline-flex items-center gap-3">
+            <span>Parle à l&apos;équipe</span>
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+              className="transition-transform group-hover:translate-x-1"
+            >
+              <path d="M5 12h14" />
+              <path d="m12 5 7 7-7 7" />
+            </svg>
           </Link>
-          <Link href="/services#parcours" className="btn-outline">
-            Mon parcours de vie →
+          <Link
+            href="/services#parcours"
+            className="text-[11px] font-light tracking-[0.18em] uppercase text-cream-dim/70 hover:text-gold transition-colors no-underline border-b border-transparent hover:border-gold/40 pb-1"
+          >
+            Mon parcours de vie
           </Link>
         </motion.div>
 

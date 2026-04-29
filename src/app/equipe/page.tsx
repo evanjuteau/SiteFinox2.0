@@ -5,7 +5,7 @@ import CTA from "@/components/sections/CTA";
 
 export const metadata = pageMetadata({
   title: "L'équipe",
-  description: 'Evan, Dany et Étienne — des vraies personnes, pas des titres.',
+  description: 'Evan, Dany et Étienne Lejeune — des vraies personnes, pas des titres.',
   path: '/equipe',
 });
 

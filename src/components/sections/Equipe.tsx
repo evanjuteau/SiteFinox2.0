@@ -20,7 +20,7 @@ const team = [
   {
     photo: "/images/team-etienne.png",
     role: "Directeur Développement & Planification",
-    name: "Étienne",
+    name: "Étienne Lejeune",
     title: "Relations, Expansion & Planification financière",
     bio: "Le moteur des partenariats et la rigueur de la planification. Il construit les ponts entre Finox et les meilleurs professionnels du marché, et s'assure que chaque dossier client est traité avec précision et profondeur.",
   },
@@ -65,23 +65,39 @@ export default function Equipe() {
                 className="bg-navy h-full flex flex-col transition-all duration-300 relative overflow-hidden group hover:bg-gold/[0.03]"
               >
                 <div className="relative w-full aspect-[4/5] overflow-hidden">
+                  <div
+                    className="absolute inset-0"
+                    aria-hidden="true"
+                    style={{
+                      background:
+                        "radial-gradient(ellipse 75% 70% at 50% 38%, rgba(212,168,67,0.32) 0%, rgba(184,140,40,0.12) 45%, rgba(12,18,32,1) 88%)",
+                    }}
+                  />
+                  <div
+                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                    aria-hidden="true"
+                    style={{
+                      background:
+                        "radial-gradient(ellipse 75% 70% at 50% 38%, rgba(212,168,67,0.5) 0%, rgba(184,140,40,0.18) 45%, rgba(12,18,32,1) 88%)",
+                    }}
+                  />
                   <Image
                     src={m.photo}
                     alt={`${m.name}, ${m.role}`}
                     fill
                     sizes="(max-width: 980px) 100vw, 33vw"
-                    className="object-cover object-top transition-transform duration-700 group-hover:scale-[1.04]"
+                    className="object-contain object-bottom transition-transform duration-700 group-hover:scale-[1.04]"
                   />
                   <div
-                    className="absolute inset-0"
+                    className="absolute inset-x-0 bottom-0 h-1/3 pointer-events-none"
+                    aria-hidden="true"
                     style={{
                       background:
-                        "linear-gradient(to top, rgba(8,12,20,0.7) 0%, rgba(8,12,20,0.2) 40%, transparent 70%)",
+                        "linear-gradient(to top, rgba(8,12,20,0.85) 0%, rgba(8,12,20,0.4) 50%, transparent 100%)",
                     }}
-                    aria-hidden="true"
                   />
                   <div
-                    className="absolute bottom-0 left-0 right-0 h-0.5 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-600"
+                    className="absolute bottom-0 left-0 right-0 h-0.5 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-600 z-10"
                     aria-hidden="true"
                     style={{
                       background:

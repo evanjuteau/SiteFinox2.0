@@ -1,4 +1,5 @@
 import Reveal from "@/components/ui/Reveal";
+import Link from "next/link";
 
 const items = [
   {
@@ -24,6 +25,12 @@ const items = [
     title: "Finox 2.0",
     body: "Le cabinet se redéfinit. **On reste petits par choix** — une équipe resserrée, des standards élevés, un accompagnement qui n'existe nulle part ailleurs au Québec. Finox 2.0 c'est pas juste un nouveau site. C'est une promesse renouvelée envers chaque client qu'on accompagne.",
     tag: "Aujourd'hui",
+  },
+  {
+    year: "2027 +",
+    title: "Et toi ?",
+    body: "La prochaine page de notre histoire, on l'écrit avec toi. **Chaque client qui nous rejoint** devient une partie permanente de cette histoire. Notre objectif n'a jamais été d'être le plus gros cabinet du Québec — c'est d'être celui que nos clients recommandent les yeux fermés.",
+    tag: "La suite",
   },
 ];
 
@@ -77,28 +84,46 @@ export default function Histoire() {
                 "linear-gradient(to bottom, transparent, rgba(212,168,67,0.35) 10%, rgba(212,168,67,0.35) 90%, transparent)",
             }}
           />
-          {items.map((it, i) => (
-            <Reveal key={it.year} delay={i * 0.12}>
-              <div className="relative mb-14 pb-14 border-b border-gold/5 last:border-b-0 last:mb-0 last:pb-0 group">
-                <span
-                  className="absolute -left-[62px] top-2 w-3 h-3 rounded-full bg-navy-50 border-2 border-gold-dark transition-all duration-300 group-hover:bg-gold group-hover:shadow-[0_0_16px_rgba(212,168,67,0.5)] group-hover:scale-125 z-10 max-[980px]:-left-[38px]"
-                  aria-hidden="true"
-                />
-                <div className="font-display text-[56px] text-gold/20 leading-none mb-2 transition-colors duration-300 group-hover:text-gold/40">
-                  {it.year}
+          {items.map((it, i) => {
+            const isFuture = it.year.includes("+");
+            return (
+              <Reveal key={it.year} delay={i * 0.12}>
+                <div className="relative mb-14 pb-14 border-b border-gold/5 last:border-b-0 last:mb-0 last:pb-0 group">
+                  <span
+                    className={`absolute -left-[62px] top-2 w-3 h-3 rounded-full transition-all duration-300 group-hover:scale-125 z-10 max-[980px]:-left-[38px] ${
+                      isFuture
+                        ? "bg-gold border-2 border-gold shadow-[0_0_18px_rgba(212,168,67,0.7)]"
+                        : "bg-navy-50 border-2 border-gold-dark group-hover:bg-gold group-hover:shadow-[0_0_16px_rgba(212,168,67,0.5)]"
+                    }`}
+                    aria-hidden="true"
+                  />
+                  <div className={`font-display text-[56px] leading-none mb-2 transition-colors duration-300 ${isFuture ? "text-gold/60 group-hover:text-gold" : "text-gold/20 group-hover:text-gold/40"}`}>
+                    {it.year}
+                  </div>
+                  <h3 className="font-serif text-[26px] font-bold text-cream mb-3 leading-tight">
+                    {it.title}
+                  </h3>
+                  <p className="text-[15px] text-muted leading-[1.85] max-w-[640px]">
+                    {renderBody(it.body)}
+                  </p>
+                  <span className="inline-flex mt-4 text-[9px] tracking-[0.18em] uppercase text-gold border border-gold/20 px-3 py-1">
+                    {it.tag}
+                  </span>
+                  {isFuture && (
+                    <div className="mt-7">
+                      <Link href="/contact" className="btn-gold inline-flex items-center gap-2">
+                        <span>Faire partie de la suite</span>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                          <path d="M5 12h14" />
+                          <path d="m12 5 7 7-7 7" />
+                        </svg>
+                      </Link>
+                    </div>
+                  )}
                 </div>
-                <h3 className="font-serif text-[26px] font-bold text-cream mb-3 leading-tight">
-                  {it.title}
-                </h3>
-                <p className="text-[15px] text-muted leading-[1.85] max-w-[640px]">
-                  {renderBody(it.body)}
-                </p>
-                <span className="inline-flex mt-4 text-[9px] tracking-[0.18em] uppercase text-gold border border-gold/20 px-3 py-1">
-                  {it.tag}
-                </span>
-              </div>
-            </Reveal>
-          ))}
+              </Reveal>
+            );
+          })}
         </div>
       </div>
     </section>

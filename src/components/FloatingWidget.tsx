@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import Link from "next/link";
 import { isProjectKey, projectKeys, projects, type ProjectKey } from "@/lib/projects";
+import { ProjectIcon } from "@/components/ui/IconMap";
+import { CloseIcon } from "@/components/ui/Icon";
 
 export default function FloatingWidget() {
   const [visible, setVisible] = useState(false);
@@ -25,10 +27,10 @@ export default function FloatingWidget() {
       }
     };
 
-    const timer = window.setTimeout(show, 25000);
+    const timer = window.setTimeout(show, 12000);
 
     const onScroll = () => {
-      if (window.scrollY > 500) show();
+      if (window.scrollY > 350) show();
     };
     window.addEventListener("scroll", onScroll, { passive: true });
 
@@ -90,8 +92,8 @@ export default function FloatingWidget() {
                     aria-label={`Choisir le projet ${project.label}`}
                     className="bg-gold/5 border border-gold/15 px-3 py-2.5 flex flex-col items-center gap-1 transition-all hover:bg-gold/15 hover:border-gold"
                   >
-                    <span className="text-lg" aria-hidden="true">
-                      {project.icon}
+                    <span className="text-gold" aria-hidden="true">
+                      <ProjectIcon name={project.icon} size={20} />
                     </span>
                     <span className="text-[9px] tracking-[0.12em] uppercase text-muted">
                       {project.label.replace("Acheter une ", "")}
@@ -110,8 +112,8 @@ export default function FloatingWidget() {
             id="finox-floating-panel"
             className="bg-navy-100 border border-gold/30 px-6 py-5 max-w-[280px] shadow-[0_20px_60px_rgba(0,0,0,0.5)]"
           >
-            <div className="text-2xl mb-3" aria-hidden="true">
-              {projects[selected].icon}
+            <div className="mb-3 text-gold" aria-hidden="true">
+              <ProjectIcon name={projects[selected].icon} size={28} />
             </div>
             <div className="font-serif text-[15px] italic text-cream-dim leading-snug mb-4">
               &ldquo;{projects[selected].floatingMsg}&rdquo;
@@ -143,13 +145,21 @@ export default function FloatingWidget() {
         aria-label={open ? "Fermer Mon Finox" : "Ouvrir Mon Finox"}
         aria-expanded={open}
         aria-controls="finox-floating-panel"
-        className={`w-14 h-14 rounded-full cursor-none flex items-center justify-center text-2xl transition-all ${
+        className={`w-14 h-14 rounded-full flex items-center justify-center transition-all ${
           open
-            ? "bg-navy-100 border border-gold/30"
-            : "bg-gold shadow-[0_8px_32px_rgba(212,168,67,0.4)] hover:scale-110"
+            ? "bg-navy-100 border border-gold/30 text-gold"
+            : "bg-gold shadow-[0_8px_32px_rgba(212,168,67,0.4)] hover:scale-110 text-navy"
         }`}
       >
-        <span aria-hidden="true">{open ? "✕" : "💬"}</span>
+        <span aria-hidden="true">
+          {open ? (
+            <CloseIcon size={20} />
+          ) : (
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+            </svg>
+          )}
+        </span>
       </button>
     </div>
   );

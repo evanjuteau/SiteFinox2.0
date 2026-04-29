@@ -57,7 +57,7 @@ export const organizationJsonLd = {
   employee: [
     {
       "@type": "Person",
-      name: "Étienne",
+      name: "Étienne Lejeune",
       jobTitle: "Directeur Développement & Planification",
     },
   ],
@@ -211,7 +211,7 @@ export const faqJsonLd = {
       name: "Qui sont les associés de Finox?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Finox est dirigé par Evan Juteau Lapierre (Associé & Courtier Senior, spécialisé en assurance et croissance) et Dany Michaud (Associé & Courtier Hypothécaire, spécialisé en financement et stratégie). Étienne complète l'équipe comme Directeur Développement & Planification.",
+        text: "Finox est dirigé par Evan Juteau Lapierre (Associé & Courtier Senior, spécialisé en assurance et croissance) et Dany Michaud (Associé & Courtier Hypothécaire, spécialisé en financement et stratégie). Étienne Lejeune complète l'équipe comme Directeur Développement & Planification.",
       },
     },
   ],
