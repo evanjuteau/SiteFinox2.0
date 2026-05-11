@@ -1,7 +1,7 @@
 "use client";
 
-import { KeyboardEvent, MouseEvent, useRef, useState } from "react";
-import { useReducedMotion } from "framer-motion";
+import { KeyboardEvent, MouseEvent, useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import Reveal from "@/components/ui/Reveal";
 
 const nodes = [
@@ -27,8 +27,24 @@ function nodePos(angle: number) {
 export default function Reseau() {
   const [hover, setHover] = useState<Node | null>(null);
   const [tipPos, setTipPos] = useState({ x: 0, y: 0 });
+  const [pulseIdx, setPulseIdx] = useState<number | null>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
   const shouldReduceMotion = useReducedMotion() ?? false;
+
+  // Idle sequential pulse — cycles through the 6 nodes while no hover
+  useEffect(() => {
+    if (shouldReduceMotion) return;
+    if (hover) {
+      setPulseIdx(null);
+      return;
+    }
+    let i = 0;
+    const id = window.setInterval(() => {
+      setPulseIdx(i % nodes.length);
+      i += 1;
+    }, 700);
+    return () => window.clearInterval(id);
+  }, [hover, shouldReduceMotion]);
 
   const placeTooltipFromMouse = (event: MouseEvent<SVGGElement>) => {
     const wrap = wrapRef.current;
@@ -142,23 +158,50 @@ export default function Reseau() {
                 })}
               </g>
 
-              {nodes.map((node) => {
+              {nodes.map((node, idx) => {
                 const point = nodePos(node.angle);
                 const isHover = hover?.id === node.id;
+                const isPulsing = !isHover && pulseIdx === idx;
                 return (
-                  <g
+                  <motion.g
                     key={node.id}
                     role="button"
                     tabIndex={0}
                     aria-label={`${node.name}. ${node.desc} Quand: ${node.when}`}
-                    style={{ cursor: "pointer" }}
+                    style={{ cursor: "pointer", transformOrigin: `${point.x}px ${point.y}px` }}
                     onMouseEnter={(e) => handleEnter(node, e)}
                     onMouseMove={placeTooltipFromMouse}
                     onMouseLeave={() => setHover(null)}
                     onFocus={() => handleFocus(node)}
                     onBlur={() => setHover(null)}
                     onKeyDown={(e) => handleNodeKey(e, node)}
+                    animate={
+                      shouldReduceMotion
+                        ? {}
+                        : {
+                            scale: isHover ? 1.06 : isPulsing ? 1.04 : 1,
+                          }
+                    }
+                    transition={{
+                      duration: isPulsing ? 0.6 : 0.3,
+                      ease: [0.23, 1, 0.32, 1],
+                    }}
                   >
+                    {/* Idle pulse halo */}
+                    {!shouldReduceMotion && isPulsing && (
+                      <circle
+                        cx={point.x}
+                        cy={point.y}
+                        r="56"
+                        fill="none"
+                        stroke="#D4A843"
+                        strokeWidth="1"
+                        opacity="0.5"
+                        style={{
+                          animation: "node-ripple 0.7s ease-out forwards",
+                        }}
+                      />
+                    )}
                     <circle
                       cx={point.x}
                       cy={point.y}
@@ -187,15 +230,29 @@ export default function Reseau() {
                       fontWeight="400"
                       letterSpacing="3"
                       style={{ transition: "all 0.3s" }}
-                      opacity={isHover ? 1 : 0.92}
+                      opacity={isHover ? 1 : isPulsing ? 1 : 0.86}
                     >
                       {node.label}
                     </text>
-                  </g>
+                  </motion.g>
                 );
               })}
 
-              <circle cx={cx} cy={cy} r="100" fill="url(#centerGrad)" aria-hidden="true" />
+              {/* Slowly rotating outer glow */}
+              <motion.circle
+                cx={cx}
+                cy={cy}
+                r="100"
+                fill="url(#centerGrad)"
+                aria-hidden="true"
+                style={{ transformOrigin: `${cx}px ${cy}px` }}
+                animate={shouldReduceMotion ? undefined : { rotate: 360 }}
+                transition={
+                  shouldReduceMotion
+                    ? undefined
+                    : { duration: 60, repeat: Infinity, ease: "linear" }
+                }
+              />
               <circle cx={cx} cy={cy} r="78" fill="#0C1220" stroke="#D4A843" strokeWidth="1.8" aria-hidden="true" />
               <circle cx={cx} cy={cy} r="70" fill="#0C1220" stroke="#D4A843" strokeWidth="0.4" opacity="0.5" aria-hidden="true" />
               <text
@@ -224,27 +281,46 @@ export default function Reseau() {
               />
             </svg>
 
-            {hover && (
-              <div
-                className="absolute pointer-events-none bg-navy-100 border border-gold/30 px-6 py-5 min-w-[240px] z-10 transition-opacity"
-                style={{ left: tipPos.x, top: tipPos.y }}
-                role="status"
-                aria-live="polite"
-              >
-                <div className="text-[9px] tracking-[0.2em] uppercase text-gold mb-2">
-                  {hover.cat}
-                </div>
-                <div className="font-serif text-lg font-bold text-cream mb-2">
-                  {hover.name}
-                </div>
-                <div className="text-xs text-muted leading-[1.65]">
-                  {hover.desc}
-                </div>
-                <div className="text-[10px] text-gold-dark mt-2.5 italic">
-                  Quand : {hover.when}
-                </div>
-              </div>
-            )}
+            <AnimatePresence>
+              {hover && (
+                <motion.div
+                  key={hover.id}
+                  className="absolute pointer-events-none bg-navy-100 border border-gold/30 px-6 py-5 min-w-[240px] z-10 shadow-[0_20px_50px_-15px_rgba(212,168,67,0.4)]"
+                  style={{ left: tipPos.x, top: tipPos.y }}
+                  role="status"
+                  aria-live="polite"
+                  initial={
+                    shouldReduceMotion
+                      ? false
+                      : { opacity: 0, scale: 0.9, y: 8 }
+                  }
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={
+                    shouldReduceMotion
+                      ? undefined
+                      : { opacity: 0, scale: 0.95, y: 8 }
+                  }
+                  transition={{
+                    type: "spring",
+                    stiffness: 320,
+                    damping: 24,
+                  }}
+                >
+                  <div className="text-[9px] tracking-[0.2em] uppercase text-gold mb-2">
+                    {hover.cat}
+                  </div>
+                  <div className="font-serif text-lg font-bold text-cream mb-2">
+                    {hover.name}
+                  </div>
+                  <div className="text-xs text-muted leading-[1.65]">
+                    {hover.desc}
+                  </div>
+                  <div className="text-[10px] text-gold-dark mt-2.5 italic">
+                    Quand : {hover.when}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </Reveal>
 

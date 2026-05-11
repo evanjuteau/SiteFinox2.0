@@ -1,10 +1,32 @@
+"use client";
+
+import { useRef } from "react";
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import Reveal from "@/components/ui/Reveal";
 import Link from "next/link";
 import { services } from "@/lib/services";
 
 export default function Services() {
+  const listRef = useRef<HTMLDivElement>(null);
+  const shouldReduceMotion = useReducedMotion() ?? false;
+
+  // Scroll progress through the services list — feeds the vertical progress bar
+  const { scrollYProgress } = useScroll({
+    target: listRef,
+    offset: ["start 80%", "end 20%"],
+  });
+  const progressScale = useTransform(scrollYProgress, [0, 1], [0, 1]);
+
   return (
-    <section className="bg-navy-50 grain border-t border-gold/10 py-32 max-[980px]:py-20" id="services">
+    <section
+      className="bg-navy-50 grain border-t border-gold/10 py-32 max-[980px]:py-20"
+      id="services"
+    >
       <div className="container-fx relative">
         <div className="grid grid-cols-[380px_1fr] gap-20 items-start max-[980px]:grid-cols-1 max-[980px]:gap-10">
           <div className="sticky top-32 max-[980px]:static">
@@ -23,8 +45,8 @@ export default function Services() {
             <Reveal delay={0.2}>
               <p className="text-[15px] text-muted leading-[1.85] mb-9">
                 De la jeune famille à l&apos;entrepreneur — on a les solutions
-                pour t&apos;accompagner à chaque étape. Clique sur un service pour
-                voir comment on l&apos;aborde.
+                pour t&apos;accompagner à chaque étape. Clique sur un service
+                pour voir comment on l&apos;aborde.
               </p>
             </Reveal>
             <Reveal delay={0.3}>
@@ -32,9 +54,27 @@ export default function Services() {
                 Discutons →
               </Link>
             </Reveal>
+
+            {/* Vertical progress indicator */}
+            <div className="mt-12 flex items-center gap-4 max-[980px]:hidden">
+              <div className="relative w-px h-32 bg-gold/15 overflow-hidden">
+                <motion.div
+                  className="absolute top-0 left-0 right-0 origin-top w-full bg-gold"
+                  style={{
+                    scaleY: shouldReduceMotion ? 1 : progressScale,
+                    height: "100%",
+                    boxShadow: "0 0 8px rgba(212, 168, 67, 0.5)",
+                  }}
+                  aria-hidden="true"
+                />
+              </div>
+              <span className="text-[9px] tracking-[0.22em] uppercase text-muted-dark">
+                7 services
+              </span>
+            </div>
           </div>
 
-          <div className="border-t border-gold/10">
+          <div ref={listRef} className="border-t border-gold/10">
             {services.map((s, i) => (
               <Reveal key={s.num} delay={i * 0.04}>
                 <Link
@@ -42,8 +82,17 @@ export default function Services() {
                   data-hover
                   className="flex items-center gap-6 py-7 border-b border-gold/5 transition-all duration-300 relative overflow-hidden group hover:pl-5 no-underline"
                 >
+                  {/* Triple-stack gold trail */}
                   <span
                     className="absolute left-0 top-0 bottom-0 w-0.5 bg-gold origin-top scale-y-0 group-hover:scale-y-100 transition-transform duration-300"
+                    aria-hidden="true"
+                  />
+                  <span
+                    className="absolute left-1.5 top-0 bottom-0 w-0.5 bg-gold/40 origin-top scale-y-0 group-hover:scale-y-100 transition-transform duration-500 delay-75"
+                    aria-hidden="true"
+                  />
+                  <span
+                    className="absolute left-3 top-0 bottom-0 w-0.5 bg-gold/15 origin-top scale-y-0 group-hover:scale-y-100 transition-transform duration-700 delay-150"
                     aria-hidden="true"
                   />
                   <span className="font-display text-3xl text-gold/20 leading-none min-w-[44px] group-hover:text-gold/60 transition-colors">
@@ -57,18 +106,40 @@ export default function Services() {
                       {s.short}
                     </p>
                     <div className="flex flex-wrap gap-1.5 mt-1.5">
-                      {s.tags.map((t) => (
-                        <span
+                      {s.tags.map((t, ti) => (
+                        <motion.span
                           key={t}
                           className="text-[9px] tracking-[0.14em] uppercase text-muted-dark border border-gold/10 px-2.5 py-0.5"
+                          initial={false}
+                          whileHover={
+                            shouldReduceMotion ? undefined : { scale: 1.04 }
+                          }
+                          style={{
+                            transitionProperty: "transform, color",
+                            transitionDuration: "0.3s",
+                          }}
+                          // Stagger cascade on parent group-hover via animation delay
+                          animate={
+                            shouldReduceMotion ? undefined : { opacity: 1 }
+                          }
+                          transition={{ delay: ti * 0.05 }}
                         >
                           {t}
-                        </span>
+                        </motion.span>
                       ))}
                     </div>
                   </div>
-                  <span className="text-xl text-gold opacity-0 group-hover:opacity-100 group-hover:translate-x-1.5 transition-all">
+                  <span
+                    className="relative text-xl text-gold opacity-0 group-hover:opacity-100 group-hover:translate-x-1.5 transition-all"
+                    aria-hidden="true"
+                  >
                     →
+                    <span
+                      className="absolute inset-0 -z-10 blur-md text-gold/60"
+                      aria-hidden="true"
+                    >
+                      →
+                    </span>
                   </span>
                 </Link>
               </Reveal>
