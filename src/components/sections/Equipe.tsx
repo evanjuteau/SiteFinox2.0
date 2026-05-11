@@ -69,61 +69,26 @@ export default function Equipe() {
             <Reveal key={m.name} delay={i * 0.1}>
               <div
                 data-hover
-                className="team-card bg-navy h-full flex flex-col transition-all duration-300 relative overflow-hidden group hover:bg-gold/[0.03]"
+                className="team-card bg-navy h-full flex flex-col transition-all duration-300 relative overflow-hidden group"
               >
-                {/* Rotating gradient border on hover */}
-                <span
-                  aria-hidden="true"
-                  className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                  style={{
-                    padding: 1,
-                    background:
-                      "conic-gradient(from var(--angle, 0deg), transparent 0deg, rgba(212,168,67,0.6) 90deg, transparent 180deg, rgba(212,168,67,0.6) 270deg, transparent 360deg)",
-                    WebkitMask:
-                      "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-                    WebkitMaskComposite: "xor",
-                    maskComposite: "exclude",
-                    animation: shouldReduceMotion
-                      ? undefined
-                      : "border-rotate 6s linear infinite",
-                  }}
-                />
-
-                <div className="relative w-full aspect-[4/5] overflow-hidden">
-                  {/* Static base gradient */}
-                  <div
-                    className="absolute inset-0"
-                    aria-hidden="true"
-                    style={{
-                      background:
-                        "radial-gradient(ellipse 75% 70% at 50% 38%, rgba(212,168,67,0.32) 0%, rgba(184,140,40,0.12) 45%, rgba(12,18,32,1) 88%)",
-                    }}
-                  />
-                  {/* Intensified gradient on hover (smooth fade) */}
-                  <div
-                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
-                    aria-hidden="true"
-                    style={{
-                      background:
-                        "radial-gradient(ellipse 80% 75% at 50% 38%, rgba(212,168,67,0.5) 0%, rgba(184,140,40,0.2) 45%, rgba(12,18,32,1) 88%)",
-                    }}
-                  />
-                  {/* Photo with ken burns + hover scale-up */}
+                {/* Photo container — light cream backdrop merges seamlessly
+                    with white-background portraits (or blends transparent PNGs). */}
+                <div className="relative w-full aspect-[4/5] overflow-hidden bg-cream">
                   <motion.div
                     className="absolute inset-0"
                     animate={
                       shouldReduceMotion
                         ? undefined
-                        : { scale: [1, 1.04, 1] }
+                        : { scale: [1, 1.035, 1] }
                     }
                     transition={
                       shouldReduceMotion
                         ? undefined
                         : {
-                            duration: 12,
+                            duration: 14,
                             repeat: Infinity,
                             ease: "easeInOut",
-                            delay: i * 1.5,
+                            delay: i * 1.6,
                           }
                     }
                   >
@@ -132,18 +97,32 @@ export default function Equipe() {
                       alt={`${m.name}, ${m.role}`}
                       fill
                       sizes="(max-width: 980px) 100vw, 33vw"
-                      className="object-contain object-bottom transition-transform duration-700 group-hover:scale-[1.04]"
+                      className="object-cover object-center transition-transform duration-700 group-hover:scale-[1.04]"
                     />
                   </motion.div>
-                  {/* Bottom navy fade for readability */}
+
+                  {/* Subtle navy fade at the top — gives the photo a darker frame
+                      at the top edge so it joins the section visually. */}
                   <div
-                    className="absolute inset-x-0 bottom-0 h-1/3 pointer-events-none"
+                    className="absolute inset-x-0 top-0 h-[18%] pointer-events-none"
                     aria-hidden="true"
                     style={{
                       background:
-                        "linear-gradient(to top, rgba(8,12,20,0.85) 0%, rgba(8,12,20,0.4) 50%, transparent 100%)",
+                        "linear-gradient(to bottom, rgba(8,12,20,0.45) 0%, rgba(8,12,20,0) 100%)",
                     }}
                   />
+
+                  {/* Bottom navy fade — blends photo edge into the dark info card below. */}
+                  <div
+                    className="absolute inset-x-0 bottom-0 h-[14%] pointer-events-none"
+                    aria-hidden="true"
+                    style={{
+                      background:
+                        "linear-gradient(to top, var(--navy) 0%, transparent 100%)",
+                    }}
+                  />
+
+                  {/* Hover gold line at the photo/info boundary */}
                   <div
                     className="absolute bottom-0 left-0 right-0 h-0.5 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-600 z-10"
                     aria-hidden="true"
@@ -154,7 +133,8 @@ export default function Equipe() {
                   />
                 </div>
 
-                <div className="p-9 px-8 flex flex-col flex-1 relative">
+                {/* Info card */}
+                <div className="p-9 px-8 flex flex-col flex-1 relative bg-navy">
                   {[
                     <p
                       key="role"
