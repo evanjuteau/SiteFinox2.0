@@ -3,6 +3,8 @@ import { pageMetadata } from "@/lib/site";
 import { articles } from "@/lib/articles";
 import Reveal from "@/components/ui/Reveal";
 import CTA from "@/components/sections/CTA";
+import FeaturedNumberParallax from "@/components/ui/FeaturedNumberParallax";
+import TagsStrip from "@/components/ui/TagsStrip";
 
 export const metadata = pageMetadata({
   title: "La Chronique",
@@ -102,26 +104,7 @@ export default function ChroniquePage() {
                     </span>
                   </div>
                 </div>
-                <div
-                  className="relative bg-navy-100 min-h-[280px] flex items-center justify-center overflow-hidden"
-                  aria-hidden="true"
-                >
-                  <div
-                    className="absolute inset-0"
-                    style={{
-                      background:
-                        "radial-gradient(ellipse 70% 70% at 50% 50%, rgba(212,168,67,0.18) 0%, transparent 70%)",
-                    }}
-                  />
-                  <p
-                    className="font-display text-[180px] max-[860px]:text-[120px] leading-none text-gold/15 select-none"
-                  >
-                    01
-                  </p>
-                  <p className="absolute bottom-6 right-6 text-[10px] tracking-[0.22em] uppercase text-gold/60">
-                    {featuredArticle.tag}
-                  </p>
-                </div>
+                <FeaturedNumberParallax tag={featuredArticle.tag} />
               </div>
             </Link>
           </Reveal>
@@ -131,19 +114,7 @@ export default function ChroniquePage() {
       {/* Tags filter (visual marker) */}
       <section className="bg-navy py-10 max-[980px]:py-6 border-t border-gold/10">
         <div className="container-fx">
-          <div className="flex flex-wrap gap-2 items-center">
-            <span className="text-[10px] tracking-[0.18em] uppercase text-muted-dark mr-3">
-              Catégories :
-            </span>
-            {tags.map((tag) => (
-              <span
-                key={tag}
-                className="text-[10px] tracking-[0.14em] uppercase text-cream-dim border border-gold/15 px-3 py-1.5"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
+          <TagsStrip tags={tags} />
         </div>
       </section>
 

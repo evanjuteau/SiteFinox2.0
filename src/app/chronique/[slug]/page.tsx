@@ -3,6 +3,9 @@ import { articles } from "@/lib/articles";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Reveal from "@/components/ui/Reveal";
+import TiltCard from "@/components/ui/TiltCard";
+import ArticleReadingProgress from "@/components/ui/ArticleReadingProgress";
+import ArticleQuestion from "@/components/ui/ArticleQuestion";
 import { defaultOgImage, organizationJsonLd, siteUrl, toIsoDate } from "@/lib/site";
 
 interface Props {
@@ -82,6 +85,7 @@ export default async function ArticlePage({ params }: Props) {
 
   return (
     <div className="pt-32 pb-32">
+      <ArticleReadingProgress />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
@@ -181,14 +185,7 @@ export default async function ArticlePage({ params }: Props) {
         </Reveal>
 
         <Reveal>
-          <div
-            className="mt-16 px-9 py-7 border-l-2 border-gold"
-            style={{ background: "rgba(212,168,67,0.04)" }}
-          >
-            <p className="font-serif text-[21px] italic text-cream-dim leading-[1.55]">
-              {article.question}
-            </p>
-          </div>
+          <ArticleQuestion question={article.question} />
         </Reveal>
 
         <Reveal>
@@ -211,32 +208,34 @@ export default async function ArticlePage({ params }: Props) {
           <div className="grid grid-cols-2 gap-px bg-gold/10 max-[980px]:grid-cols-1">
             {otherArticles.map((item, i) => (
               <Reveal key={item.slug} delay={i * 0.1}>
-                <Link
-                  href={`/chronique/${item.slug}`}
-                  data-hover
-                  className="bg-navy p-10 px-9 block transition-all duration-300 relative overflow-hidden group no-underline h-full hover:bg-navy-100"
-                >
-                  <div
-                    className="absolute top-0 left-0 right-0 h-0.5 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"
-                    aria-hidden="true"
-                    style={{
-                      background:
-                        "linear-gradient(90deg, var(--gold), var(--gold-dark))",
-                    }}
-                  />
-                  <p className="text-[9px] tracking-[0.22em] uppercase text-gold mb-4">
-                    {item.tag}
-                  </p>
-                  <h3 className="font-serif text-xl font-bold text-cream leading-[1.25] mb-3">
-                    {item.title}
-                  </h3>
-                  <p className="text-sm text-muted leading-[1.75] mb-4">
-                    {item.excerpt}
-                  </p>
-                  <span className="text-xs text-muted">
-                    Par {item.author}
-                  </span>
-                </Link>
+                <TiltCard className="h-full" max={4} perspective={1500}>
+                  <Link
+                    href={`/chronique/${item.slug}`}
+                    data-hover
+                    className="bg-navy p-10 px-9 block transition-all duration-300 relative overflow-hidden group no-underline h-full hover:bg-navy-100"
+                  >
+                    <div
+                      className="absolute top-0 left-0 right-0 h-0.5 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"
+                      aria-hidden="true"
+                      style={{
+                        background:
+                          "linear-gradient(90deg, var(--gold), var(--gold-dark))",
+                      }}
+                    />
+                    <p className="text-[9px] tracking-[0.22em] uppercase text-gold mb-4">
+                      {item.tag}
+                    </p>
+                    <h3 className="font-serif text-xl font-bold text-cream leading-[1.25] mb-3">
+                      {item.title}
+                    </h3>
+                    <p className="text-sm text-muted leading-[1.75] mb-4">
+                      {item.excerpt}
+                    </p>
+                    <span className="text-xs text-muted">
+                      Par {item.author}
+                    </span>
+                  </Link>
+                </TiltCard>
               </Reveal>
             ))}
           </div>
