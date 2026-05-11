@@ -78,7 +78,7 @@ export default function StatsBar() {
             <span className="block font-display text-[68px] text-cream leading-none tracking-wide relative">
               {s.prefix && <em className="not-italic text-gold">{s.prefix}</em>}
               {s.n !== null ? (
-                <CountUp to={s.n} duration={1.4} power={2.2} />
+                <CountUp to={s.n} duration={0.9} power={2.4} />
               ) : (
                 <LetterByLetter text={s.text ?? ""} />
               )}

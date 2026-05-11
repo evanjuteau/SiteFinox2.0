@@ -26,8 +26,8 @@ export default function Hero() {
     offset: ["start start", "end start"],
   });
 
-  // Section-wide fade-out as user scrolls past
-  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+  // Section-wide fade-out as user scrolls past (more gentle curve)
+  const opacity = useTransform(scrollYProgress, [0, 0.95], [1, 0]);
   // Main content parallax — fast layer
   const contentY = useTransform(scrollYProgress, [0, 1], [0, 100]);
   const contentScale = useTransform(scrollYProgress, [0, 1], [1, 0.9]);

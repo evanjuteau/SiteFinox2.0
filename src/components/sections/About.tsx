@@ -88,8 +88,8 @@ export default function About() {
                   &ldquo;
                   <Typewriter
                     text="Plus qu'un cabinet, un véritable partenaire."
-                    cps={28}
-                    delay={300}
+                    cps={55}
+                    delay={150}
                   />
                   &rdquo;
                 </p>

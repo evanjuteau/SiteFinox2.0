@@ -8,7 +8,6 @@ import Footer from "@/components/Footer";
 import FloatingWidget from "@/components/FloatingWidget";
 import SpotlightCursor from "@/components/ui/SpotlightCursor";
 import ScrollProgressBar from "@/components/ui/ScrollProgressBar";
-import PageTransition from "@/components/ui/PageTransition";
 import {
   defaultOgImage,
   faqJsonLd,
@@ -127,7 +126,7 @@ export default function RootLayout({
           <CustomCursor />
           <Nav />
           <main id="main-content" tabIndex={-1}>
-            <PageTransition>{children}</PageTransition>
+            {children}
           </main>
           <Footer />
           <FloatingWidget />

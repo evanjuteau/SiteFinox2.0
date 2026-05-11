@@ -127,7 +127,7 @@ export default function Reseau() {
                 </radialGradient>
               </defs>
 
-              <g opacity={0.35} aria-hidden="true">
+              <g opacity={0.65} aria-hidden="true">
                 {nodes.map((node, i) => {
                   const point = nodePos(node.angle);
                   const isHover = hover?.id === node.id;
@@ -139,9 +139,9 @@ export default function Reseau() {
                       x2={point.x}
                       y2={point.y}
                       stroke="#D4A843"
-                      strokeWidth={isHover ? 1.5 : 0.6}
+                      strokeWidth={isHover ? 1.8 : 1.1}
                       strokeDasharray="4 6"
-                      opacity={isHover ? 1 : 0.35}
+                      opacity={isHover ? 1 : 0.55}
                       style={{ transition: "all 0.3s" }}
                     >
                       {!shouldReduceMotion && (
