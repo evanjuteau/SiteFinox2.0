@@ -6,6 +6,9 @@ import CustomCursor from "@/components/CustomCursor";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import FloatingWidget from "@/components/FloatingWidget";
+import SpotlightCursor from "@/components/ui/SpotlightCursor";
+import ScrollProgressBar from "@/components/ui/ScrollProgressBar";
+import PageTransition from "@/components/ui/PageTransition";
 import {
   defaultOgImage,
   faqJsonLd,
@@ -119,10 +122,12 @@ export default function RootLayout({
           }}
         />
         <SmoothScrollProvider>
+          <ScrollProgressBar />
+          <SpotlightCursor />
           <CustomCursor />
           <Nav />
           <main id="main-content" tabIndex={-1}>
-            {children}
+            <PageTransition>{children}</PageTransition>
           </main>
           <Footer />
           <FloatingWidget />
