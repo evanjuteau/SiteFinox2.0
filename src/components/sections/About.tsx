@@ -1,4 +1,6 @@
 import Reveal from "@/components/ui/Reveal";
+import TiltCard from "@/components/ui/TiltCard";
+import Typewriter from "@/components/ui/Typewriter";
 
 const pillars = [
   {
@@ -83,8 +85,13 @@ export default function About() {
                 style={{ background: "rgba(212,168,67,0.04)" }}
               >
                 <p className="font-serif text-[21px] italic text-cream-dim leading-[1.55]">
-                  &ldquo;Plus qu&apos;un cabinet, un véritable
-                  partenaire.&rdquo;
+                  &ldquo;
+                  <Typewriter
+                    text="Plus qu'un cabinet, un véritable partenaire."
+                    cps={28}
+                    delay={300}
+                  />
+                  &rdquo;
                 </p>
                 <cite className="block mt-3.5 text-[10px] tracking-[0.18em] uppercase text-muted-dark not-italic">
                   — Finox, Services Financiers
@@ -97,25 +104,44 @@ export default function About() {
         <div className="grid grid-cols-4 max-[980px]:grid-cols-2 max-[600px]:grid-cols-1">
           {pillars.map((p, i) => (
             <Reveal key={p.n} delay={i * 0.1}>
-              <div
-                className="p-11 px-8 border border-gold/10 border-l-0 first:border-l bg-navy-50 transition-all duration-300 hover:bg-navy-100 hover:-translate-y-1 relative overflow-hidden group h-full"
-                data-hover
-              >
+              <TiltCard className="h-full" max={6}>
                 <div
-                  className="absolute bottom-0 left-0 right-0 h-0.5 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"
-                  style={{
-                    background:
-                      "linear-gradient(90deg, var(--gold), var(--gold-dark))",
-                  }}
-                />
-                <span className="block font-display text-[52px] text-gold/[0.18] leading-none mb-4 transition-colors duration-300 group-hover:text-gold/[0.35]">
-                  {p.n}
-                </span>
-                <h3 className="font-serif text-[19px] font-bold text-cream mb-2.5">
-                  {p.t}
-                </h3>
-                <p className="text-[13px] text-muted leading-[1.78]">{p.p}</p>
-              </div>
+                  className="p-11 px-8 border border-gold/10 border-l-0 first:border-l bg-navy-50 transition-all duration-300 hover:bg-navy-100 hover:-translate-y-1 relative overflow-hidden group h-full"
+                  data-hover
+                >
+                  <div
+                    className="absolute bottom-0 left-0 right-0 h-0.5 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"
+                    style={{
+                      background:
+                        "linear-gradient(90deg, var(--gold), var(--gold-dark))",
+                    }}
+                  />
+                  <span className="pillar-num block font-display text-[52px] leading-none mb-4 relative overflow-hidden">
+                    <span className="block text-gold/[0.18] transition-colors duration-300 group-hover:text-gold/[0.35]">
+                      {p.n}
+                    </span>
+                    {/* Shimmer overlay on hover */}
+                    <span
+                      aria-hidden="true"
+                      className="pointer-events-none absolute inset-0 bg-clip-text text-transparent opacity-0 group-hover:opacity-100 group-hover:[animation:pillar-shimmer_0.9s_cubic-bezier(0.23,1,0.32,1)_1]"
+                      style={{
+                        backgroundImage:
+                          "linear-gradient(120deg, transparent 30%, rgba(255,228,150,0.85) 50%, transparent 70%)",
+                        backgroundSize: "200% 100%",
+                        WebkitBackgroundClip: "text",
+                      }}
+                    >
+                      {p.n}
+                    </span>
+                  </span>
+                  <h3 className="font-serif text-[19px] font-bold text-cream mb-2.5">
+                    {p.t}
+                  </h3>
+                  <p className="text-[13px] text-muted leading-[1.78]">
+                    {p.p}
+                  </p>
+                </div>
+              </TiltCard>
             </Reveal>
           ))}
         </div>

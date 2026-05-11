@@ -1,7 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import {
+  motion,
+  AnimatePresence,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import Reveal from "@/components/ui/Reveal";
 import Link from "next/link";
 import { isProjectKey, projectKeys, projects, type ProjectKey } from "@/lib/projects";
@@ -15,7 +21,16 @@ const gridClassByStepCount: Record<number, string> = {
 
 export default function Parcours() {
   const [selected, setSelected] = useState<ProjectKey>("maison");
+  const [direction, setDirection] = useState<1 | -1>(1);
   const shouldReduceMotion = useReducedMotion() ?? false;
+  const timelineRef = useRef<HTMLDivElement>(null);
+
+  // Draw the gold horizontal line as user scrolls past the timeline.
+  const { scrollYProgress } = useScroll({
+    target: timelineRef,
+    offset: ["start 85%", "start 30%"],
+  });
+  const lineScaleX = useTransform(scrollYProgress, [0, 1], [0, 1]);
 
   useEffect(() => {
     const saved = sessionStorage.getItem("finoxProject");
@@ -34,9 +49,15 @@ export default function Parcours() {
   }, []);
 
   const handleSelect = (key: ProjectKey) => {
+    // Determine slide direction based on the order of keys
+    const currentIdx = projectKeys.indexOf(selected);
+    const nextIdx = projectKeys.indexOf(key);
+    setDirection(nextIdx > currentIdx ? 1 : -1);
     setSelected(key);
     sessionStorage.setItem("finoxProject", key);
-    window.dispatchEvent(new CustomEvent<ProjectKey>("finox:project", { detail: key }));
+    window.dispatchEvent(
+      new CustomEvent<ProjectKey>("finox:project", { detail: key })
+    );
   };
 
   const current = projects[selected];
@@ -101,22 +122,60 @@ export default function Parcours() {
                   }`}
                 >
                   {isActive && !shouldReduceMotion && (
-                    <motion.div
-                      layoutId="activeIndicator"
-                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold"
-                    />
+                    <>
+                      <motion.div
+                        layoutId="activeIndicator"
+                        className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold"
+                        transition={{
+                          type: "spring",
+                          stiffness: 320,
+                          damping: 28,
+                        }}
+                      />
+                      {/* Glow trail under indicator */}
+                      <motion.div
+                        layoutId="activeIndicatorGlow"
+                        className="absolute -bottom-1 left-0 right-0 h-3 pointer-events-none"
+                        style={{
+                          background:
+                            "linear-gradient(to top, rgba(212,168,67,0.45), transparent)",
+                          filter: "blur(6px)",
+                        }}
+                        transition={{
+                          type: "spring",
+                          stiffness: 320,
+                          damping: 28,
+                        }}
+                      />
+                    </>
                   )}
                   {isActive && shouldReduceMotion && (
-                    <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" aria-hidden="true" />
+                    <span
+                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold"
+                      aria-hidden="true"
+                    />
                   )}
-                  <span
-                    className={`relative z-10 transition-all ${
-                      isActive ? "text-gold scale-110" : "text-muted"
+                  <motion.span
+                    className={`relative z-10 ${
+                      isActive ? "text-gold" : "text-muted"
                     }`}
                     aria-hidden="true"
+                    animate={
+                      shouldReduceMotion
+                        ? undefined
+                        : { scale: isActive ? 1.12 : 1 }
+                    }
+                    transition={{
+                      type: "spring",
+                      stiffness: 260,
+                      damping: 20,
+                    }}
+                    whileHover={
+                      shouldReduceMotion ? undefined : { rotate: 360 }
+                    }
                   >
                     <ProjectIcon name={project.icon} size={26} />
-                  </span>
+                  </motion.span>
                   <span
                     className={`text-[10px] font-medium tracking-[0.14em] uppercase relative z-10 transition-colors ${
                       isActive ? "text-gold" : "text-muted"
@@ -130,21 +189,44 @@ export default function Parcours() {
           </div>
         </Reveal>
 
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="wait" custom={direction}>
           <motion.div
             key={selected}
-            initial={shouldReduceMotion ? false : { opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={shouldReduceMotion ? undefined : { opacity: 0, y: -8 }}
-            transition={{ duration: shouldReduceMotion ? 0 : 0.5, ease: [0.23, 1, 0.32, 1] }}
+            ref={timelineRef}
+            custom={direction}
+            initial={
+              shouldReduceMotion
+                ? false
+                : { opacity: 0, y: 16, x: direction === 1 ? 24 : -24 }
+            }
+            animate={{ opacity: 1, y: 0, x: 0 }}
+            exit={
+              shouldReduceMotion
+                ? undefined
+                : { opacity: 0, y: -8, x: direction === 1 ? -24 : 24 }
+            }
+            transition={{
+              duration: shouldReduceMotion ? 0 : 0.55,
+              ease: [0.23, 1, 0.32, 1],
+            }}
             className="relative pb-10"
           >
+            {/* Static base line — barely visible until scroll fills it */}
             <div
               className="absolute left-0 right-0 h-px top-7 max-[980px]:hidden"
               aria-hidden="true"
               style={{
+                background: "rgba(212,168,67,0.08)",
+              }}
+            />
+            {/* Animated gold line — draws as user scrolls into section */}
+            <motion.div
+              className="absolute left-0 right-0 h-px top-7 max-[980px]:hidden origin-left"
+              aria-hidden="true"
+              style={{
                 background:
-                  "linear-gradient(90deg, transparent, rgba(212,168,67,0.35) 8%, rgba(212,168,67,0.35) 92%, transparent)",
+                  "linear-gradient(90deg, transparent, rgba(212,168,67,0.55) 8%, rgba(212,168,67,0.55) 92%, transparent)",
+                scaleX: shouldReduceMotion ? 1 : lineScaleX,
               }}
             />
             <div className={`grid ${gridCols} gap-0 relative max-[980px]:grid-cols-2`}>
@@ -152,9 +234,18 @@ export default function Parcours() {
                 return (
                   <motion.div
                     key={`${selected}-${step.num}`}
-                    initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: shouldReduceMotion ? 0 : i * 0.08 }}
+                    initial={
+                      shouldReduceMotion
+                        ? false
+                        : { opacity: 0, y: 20, scale: 0.92 }
+                    }
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    transition={{
+                      delay: shouldReduceMotion ? 0 : i * 0.08,
+                      type: "spring",
+                      stiffness: 260,
+                      damping: 18,
+                    }}
                     className="flex flex-col items-center px-2 relative group"
                   >
                     <div className="flex flex-col items-center w-full">
@@ -169,10 +260,25 @@ export default function Parcours() {
                         data-hover
                         className="bg-navy-50 border border-gold/10 p-5 px-4 w-full h-full flex flex-col transition-all duration-300 relative overflow-hidden text-left group-hover:bg-navy-100 group-hover:border-gold/30 group-hover:-translate-y-0.5"
                       >
-                        <div className="absolute top-0 left-0 right-0 h-0.5 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500 bg-gradient-to-r from-gold to-gold-dark" aria-hidden="true" />
-                        <span className="block mb-2.5 text-gold/70 group-hover:text-gold transition-colors" aria-hidden="true">
+                        <div
+                          className="absolute top-0 left-0 right-0 h-0.5 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500 bg-gradient-to-r from-gold to-gold-dark"
+                          aria-hidden="true"
+                        />
+                        <motion.span
+                          className="block mb-2.5 text-gold/70 group-hover:text-gold transition-colors"
+                          aria-hidden="true"
+                          whileHover={
+                            shouldReduceMotion
+                              ? undefined
+                              : { rotate: 360, scale: 1.1 }
+                          }
+                          transition={{
+                            duration: 0.6,
+                            ease: [0.23, 1, 0.32, 1],
+                          }}
+                        >
                           <ProjectIcon name={step.icon} size={22} />
-                        </span>
+                        </motion.span>
                         <h3 className="font-serif text-[13px] font-bold text-cream mb-1.5 leading-tight">
                           {step.title}
                         </h3>

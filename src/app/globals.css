@@ -191,6 +191,24 @@
   }
 }
 
+@keyframes pillar-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+@keyframes gold-sweep {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;

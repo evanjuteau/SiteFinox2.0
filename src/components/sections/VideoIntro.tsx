@@ -1,7 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  useReducedMotion,
+  useMotionValue,
+  useSpring,
+} from "framer-motion";
 import Reveal from "@/components/ui/Reveal";
 import { CloseIcon, MinimizeIcon } from "@/components/ui/Icon";
 
@@ -13,11 +19,18 @@ const POSTER_SRC = "/images/logo.png"; // placeholder poster
 export default function VideoIntro() {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const playBtnRef = useRef<HTMLButtonElement>(null);
   const [inView, setInView] = useState(true);
   const [pipDismissed, setPipDismissed] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const shouldReduceMotion = useReducedMotion() ?? false;
+
+  // Magnetic play button motion values
+  const btnX = useMotionValue(0);
+  const btnY = useMotionValue(0);
+  const btnXSpring = useSpring(btnX, { stiffness: 180, damping: 18, mass: 0.5 });
+  const btnYSpring = useSpring(btnY, { stiffness: 180, damping: 18, mass: 0.5 });
 
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 760px)");
@@ -46,6 +59,34 @@ export default function VideoIntro() {
   useEffect(() => {
     if (inView) setPipDismissed(false);
   }, [inView]);
+
+  // Magnetic mouse follow on play button
+  useEffect(() => {
+    if (shouldReduceMotion || isMobile) return;
+    const el = playBtnRef.current;
+    if (!el) return;
+
+    const onMove = (e: MouseEvent) => {
+      const rect = el.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = e.clientX - cx;
+      const dy = e.clientY - cy;
+      const dist = Math.hypot(dx, dy);
+      const radius = 100;
+      if (dist < radius) {
+        const f = (radius - dist) / radius;
+        btnX.set((dx / radius) * 18 * f);
+        btnY.set((dy / radius) * 18 * f);
+      } else {
+        btnX.set(0);
+        btnY.set(0);
+      }
+    };
+
+    window.addEventListener("mousemove", onMove, { passive: true });
+    return () => window.removeEventListener("mousemove", onMove);
+  }, [shouldReduceMotion, isMobile, btnX, btnY, isPlaying]);
 
   const showPip = !inView && !pipDismissed && !shouldReduceMotion && !isMobile && isPlaying;
 
@@ -127,16 +168,43 @@ export default function VideoIntro() {
                 damping: 28,
                 stiffness: 180,
                 mass: 0.8,
+                filter: { duration: 0.4 },
               }}
-              className={`overflow-hidden border-2 border-gold/30 bg-navy-100 ${
+              initial={false}
+              animate={
+                shouldReduceMotion
+                  ? {}
+                  : { filter: showPip ? "blur(0px)" : "blur(0px)" }
+              }
+              className={`overflow-hidden bg-navy-100 ${
                 showPip
-                  ? "fixed bottom-5 right-5 w-[340px] aspect-video z-[700] shadow-[0_30px_60px_rgba(0,0,0,0.6)]"
-                  : "absolute inset-0 shadow-[0_30px_70px_-20px_rgba(212,168,67,0.25),0_20px_50px_rgba(0,0,0,0.45)] hover:shadow-[0_35px_80px_-20px_rgba(212,168,67,0.4),0_20px_50px_rgba(0,0,0,0.55)] hover:border-gold/60 transition-shadow duration-500"
+                  ? "fixed bottom-5 right-5 w-[340px] aspect-video z-[700] shadow-[0_30px_60px_rgba(0,0,0,0.6)] border-2 border-gold/40"
+                  : "absolute inset-0 shadow-[0_30px_70px_-20px_rgba(212,168,67,0.25),0_20px_50px_rgba(0,0,0,0.45)] hover:shadow-[0_35px_80px_-20px_rgba(212,168,67,0.4),0_20px_50px_rgba(0,0,0,0.55)] hover:border-gold/60 transition-shadow duration-500 border-2"
               }`}
               style={{
                 borderRadius: showPip ? 4 : 2,
               }}
             >
+              {/* Breathing border overlay — only on inline mode */}
+              {!showPip && !shouldReduceMotion && (
+                <motion.span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0 border-2 border-gold"
+                  animate={{ opacity: [0.25, 0.55, 0.25] }}
+                  transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                />
+              )}
+              {/* Static border for reduced-motion mode or PiP */}
+              {(showPip || shouldReduceMotion) && (
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0 border-2 border-gold/30"
+                />
+              )}
               {/* The real video element (will load when src is set) */}
               {VIDEO_SRC ? (
                 <video
@@ -177,6 +245,7 @@ export default function VideoIntro() {
               <AnimatePresence>
                 {!isPlaying && (
                   <motion.button
+                    ref={playBtnRef}
                     type="button"
                     onClick={handlePlayClick}
                     aria-label={VIDEO_SRC ? "Lire la vidéo" : "Vidéo bientôt disponible"}
@@ -185,20 +254,37 @@ export default function VideoIntro() {
                     exit={shouldReduceMotion ? undefined : { opacity: 0 }}
                     className="absolute inset-0 flex flex-col items-center justify-center gap-5 group cursor-pointer bg-navy/30 hover:bg-navy/15 transition-colors"
                   >
-                    <span
+                    <motion.span
+                      style={
+                        shouldReduceMotion
+                          ? undefined
+                          : { x: btnXSpring, y: btnYSpring }
+                      }
                       className="relative w-20 h-20 rounded-full bg-gold flex items-center justify-center transition-transform group-hover:scale-110 max-[760px]:w-16 max-[760px]:h-16"
-                      style={{
-                        boxShadow:
-                          "0 0 0 0 rgba(212,168,67,0.6), 0 8px 28px rgba(212,168,67,0.45)",
-                      }}
                     >
+                      {/* Concentric ripples — 3 layers */}
+                      {!shouldReduceMotion &&
+                        [0, 0.8, 1.6].map((delay) => (
+                          <motion.span
+                            key={delay}
+                            aria-hidden="true"
+                            className="absolute inset-0 rounded-full border-2 border-gold"
+                            initial={{ scale: 1, opacity: 0.55 }}
+                            animate={{ scale: 2.4, opacity: 0 }}
+                            transition={{
+                              duration: 2.4,
+                              delay,
+                              repeat: Infinity,
+                              ease: "easeOut",
+                            }}
+                          />
+                        ))}
                       <span
                         className="absolute inset-0 rounded-full"
                         aria-hidden="true"
                         style={{
-                          animation: shouldReduceMotion
-                            ? undefined
-                            : "playPulse 2.4s ease-out infinite",
+                          boxShadow:
+                            "0 0 0 0 rgba(212,168,67,0.6), 0 8px 28px rgba(212,168,67,0.45)",
                         }}
                       />
                       <svg
@@ -206,12 +292,12 @@ export default function VideoIntro() {
                         height="26"
                         viewBox="0 0 24 24"
                         fill="currentColor"
-                        className="text-navy ml-1"
+                        className="text-navy ml-1 relative"
                         aria-hidden="true"
                       >
                         <polygon points="6,4 20,12 6,20" />
                       </svg>
-                    </span>
+                    </motion.span>
                     <span className="font-serif text-[18px] italic text-cream-dim max-[760px]:text-[14px]">
                       {VIDEO_SRC ? "Regarder l'intro · 60s" : "Vidéo bientôt disponible"}
                     </span>
