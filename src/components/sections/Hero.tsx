@@ -5,6 +5,8 @@ import Link from "next/link";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import Particles from "@/components/ui/Particles";
+import SplitWords from "@/components/ui/SplitWords";
+import MagneticCTA from "@/components/ui/MagneticCTA";
 
 const ease = [0.23, 1, 0.32, 1] as const;
 
@@ -24,9 +26,15 @@ export default function Hero() {
     offset: ["start start", "end start"],
   });
 
+  // Section-wide fade-out as user scrolls past
   const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.9]);
-  const y = useTransform(scrollYProgress, [0, 1], [0, 100]);
+  // Main content parallax — fast layer
+  const contentY = useTransform(scrollYProgress, [0, 1], [0, 100]);
+  const contentScale = useTransform(scrollYProgress, [0, 1], [1, 0.9]);
+  // Horizontal accent lines — medium layer
+  const linesY = useTransform(scrollYProgress, [0, 1], [0, -120]);
+  // Particles wrapper — slow layer (handled via separate motion.div around <Particles>)
+  const particlesY = useTransform(scrollYProgress, [0, 1], [0, -70]);
 
   return (
     <motion.section
@@ -35,7 +43,13 @@ export default function Hero() {
       className="relative h-screen min-h-[700px] flex items-center justify-center overflow-hidden text-center"
       id="hero"
     >
-      <Particles />
+      <motion.div
+        className="absolute inset-0 z-0"
+        style={shouldReduceMotion ? undefined : { y: particlesY }}
+        aria-hidden="true"
+      >
+        <Particles />
+      </motion.div>
 
       <div
         className="absolute inset-0 z-[1] animate-glow-pulse"
@@ -48,34 +62,37 @@ export default function Hero() {
         }}
       />
 
-      <div
-        className="absolute left-0 right-0 h-px"
+      <motion.div
+        className="absolute left-0 right-0 h-px z-[1]"
         aria-hidden="true"
         style={{
           top: "28%",
           background:
             "linear-gradient(90deg, transparent, rgba(212,168,67,0.08), rgba(212,168,67,0.15), rgba(212,168,67,0.08), transparent)",
+          ...(shouldReduceMotion ? {} : { y: linesY }),
         }}
       />
-      <div
-        className="absolute left-0 right-0 h-px"
+      <motion.div
+        className="absolute left-0 right-0 h-px z-[1]"
         aria-hidden="true"
         style={{
           top: "72%",
           background:
             "linear-gradient(90deg, transparent, rgba(212,168,67,0.08), rgba(212,168,67,0.15), rgba(212,168,67,0.08), transparent)",
+          ...(shouldReduceMotion ? {} : { y: linesY }),
         }}
       />
 
       <motion.div
-        style={shouldReduceMotion ? undefined : { scale, y }}
+        style={shouldReduceMotion ? undefined : { scale: contentScale, y: contentY }}
         className="relative z-[3] flex flex-col items-center px-6"
       >
         <motion.div
-          initial={shouldReduceMotion ? false : { opacity: 0, y: 40, scale: 0.95 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: shouldReduceMotion ? 0 : 1.2, ease }}
+          initial={shouldReduceMotion ? false : { opacity: 0, y: 40, scale: 0.95, filter: "blur(8px)" }}
+          animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+          transition={{ duration: shouldReduceMotion ? 0 : 1.3, ease }}
           className="animate-logo-glow"
+          style={{ willChange: "transform, opacity, filter" }}
         >
           <Image
             src="/images/logo.png"
@@ -99,17 +116,18 @@ export default function Hero() {
           }}
         />
 
-        <motion.p
-          {...appear(0.5, shouldReduceMotion)}
+        <SplitWords
+          as="p"
+          text={"Plus qu'un cabinet,\nun véritable partenaire."}
+          delay={0.55}
+          stagger={0.07}
+          duration={0.65}
+          preserveLineBreaks
           className="font-serif text-[clamp(26px,3.2vw,44px)] font-normal italic text-cream-dim leading-[1.4] max-w-[520px]"
-        >
-          Plus qu&apos;un cabinet,
-          <br />
-          un véritable partenaire.
-        </motion.p>
+        />
 
         <motion.p
-          {...appear(0.65, shouldReduceMotion)}
+          {...appear(0.95, shouldReduceMotion)}
           className="text-sm font-light text-muted leading-relaxed max-w-[420px] mt-4 mb-10"
         >
           Pas de jargon. Pas de bullshit. Une vraie conversation avec
@@ -118,10 +136,15 @@ export default function Hero() {
         </motion.p>
 
         <motion.div
-          {...appear(0.8, shouldReduceMotion)}
+          {...appear(1.1, shouldReduceMotion)}
           className="flex gap-5 justify-center items-center flex-wrap"
         >
-          <Link href="/contact" className="btn-gold btn-gold--xl group inline-flex items-center gap-3">
+          <MagneticCTA
+            href="/contact"
+            className="btn-gold btn-gold--xl group"
+            strength={12}
+            radius={110}
+          >
             <span>Parle à l&apos;équipe</span>
             <svg
               width="14"
@@ -138,7 +161,7 @@ export default function Hero() {
               <path d="M5 12h14" />
               <path d="m12 5 7 7-7 7" />
             </svg>
-          </Link>
+          </MagneticCTA>
           <Link
             href="/services#parcours"
             className="text-[11px] font-light tracking-[0.18em] uppercase text-cream-dim/70 hover:text-gold transition-colors no-underline border-b border-transparent hover:border-gold/40 pb-1"
@@ -148,7 +171,7 @@ export default function Hero() {
         </motion.div>
 
         <motion.p
-          {...appear(0.9, shouldReduceMotion)}
+          {...appear(1.2, shouldReduceMotion)}
           className="text-xs text-muted mt-5 max-w-[380px]"
         >
           Pas de centre d&apos;appel. Pas de robot. Tu parles directement à
@@ -158,7 +181,7 @@ export default function Hero() {
         <motion.p
           initial={shouldReduceMotion ? false : { opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: shouldReduceMotion ? 0 : 0.9, delay: shouldReduceMotion ? 0 : 0.95 }}
+          transition={{ duration: shouldReduceMotion ? 0 : 0.9, delay: shouldReduceMotion ? 0 : 1.3 }}
           className="text-[11px] tracking-[0.3em] uppercase mt-7"
           style={{ color: "rgba(212,168,67,0.65)" }}
         >
@@ -176,12 +199,32 @@ export default function Hero() {
         <span className="text-[9px] tracking-[0.22em] uppercase text-muted">
           Défiler
         </span>
-        <div
-          className="w-px h-14 animate-scroll-drop"
+        <motion.div
+          className="w-px origin-top"
           style={{
-            background:
-              "linear-gradient(to bottom, var(--gold), transparent)",
+            height: 56,
+            background: "linear-gradient(to bottom, var(--gold), transparent)",
           }}
+          initial={shouldReduceMotion ? false : { scaleY: 0 }}
+          animate={
+            shouldReduceMotion
+              ? { scaleY: 1 }
+              : {
+                  scaleY: [0, 1, 1, 0],
+                  originY: ["0%", "0%", "100%", "100%"] as unknown as number[],
+                }
+          }
+          transition={
+            shouldReduceMotion
+              ? { duration: 0 }
+              : {
+                  duration: 2.4,
+                  times: [0, 0.45, 0.55, 1],
+                  ease: [0.55, 0.085, 0.68, 0.53],
+                  repeat: Infinity,
+                  repeatDelay: 0.3,
+                }
+          }
         />
       </motion.div>
     </motion.section>
