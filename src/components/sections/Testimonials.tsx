@@ -1,3 +1,6 @@
+"use client";
+
+import { motion, useReducedMotion } from "framer-motion";
 import Reveal from "@/components/ui/Reveal";
 import { StarIcon } from "@/components/ui/Icon";
 
@@ -59,6 +62,11 @@ const reviews: Review[] = [
 const GOOGLE_REVIEWS_URL = "https://share.google/D1somtWzTLnfdIZy9";
 
 export default function Testimonials() {
+  return <TestimonialsInner />;
+}
+
+function TestimonialsInner() {
+  const shouldReduceMotion = useReducedMotion() ?? false;
   return (
     <section className="bg-navy-50 grain border-t border-gold/10 relative overflow-hidden py-32 max-[980px]:py-20">
       <div
@@ -108,14 +116,28 @@ export default function Testimonials() {
             <Reveal key={r.name} delay={i * 0.08}>
               <article
                 data-hover
-                className={`relative h-full p-9 transition-all duration-300 hover:-translate-y-1 ${
+                className={`relative h-full p-9 transition-all duration-300 hover:-translate-y-1 group ${
                   r.highlight
-                    ? "bg-navy border-2 border-gold/40 hover:border-gold/70 shadow-[0_18px_50px_-20px_rgba(212,168,67,0.35)]"
+                    ? "bg-navy border-2 border-gold/40 hover:border-gold/70 shadow-[0_18px_50px_-20px_rgba(212,168,67,0.35)] overflow-hidden"
                     : "bg-navy border border-gold/10 hover:border-gold/30 shadow-[0_8px_28px_-15px_rgba(0,0,0,0.6)]"
                 }`}
               >
-                <div className="flex items-start gap-4 mb-5">
-                  <div
+                {/* Highlighted card: animated gold border shimmer */}
+                {r.highlight && !shouldReduceMotion && (
+                  <span
+                    aria-hidden="true"
+                    className="absolute inset-0 pointer-events-none"
+                    style={{
+                      background:
+                        "linear-gradient(120deg, transparent 40%, rgba(255,228,150,0.18) 50%, transparent 60%)",
+                      backgroundSize: "200% 100%",
+                      animation: "gold-sweep 6s ease-in-out infinite",
+                    }}
+                  />
+                )}
+
+                <div className="flex items-start gap-4 mb-5 relative">
+                  <motion.div
                     className="w-12 h-12 shrink-0 rounded-full flex items-center justify-center font-display text-[18px] tracking-[2px]"
                     style={{
                       background:
@@ -123,9 +145,22 @@ export default function Testimonials() {
                       color: "var(--navy)",
                     }}
                     aria-hidden="true"
+                    initial={
+                      shouldReduceMotion
+                        ? false
+                        : { rotate: -180, scale: 0, opacity: 0 }
+                    }
+                    whileInView={{ rotate: 0, scale: 1, opacity: 1 }}
+                    viewport={{ once: true, amount: 0.4 }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 200,
+                      damping: 14,
+                      delay: i * 0.1,
+                    }}
                   >
                     {r.initials}
-                  </div>
+                  </motion.div>
                   <div className="flex-1 min-w-0">
                     <div className="font-serif text-[16px] font-bold text-cream leading-tight truncate">
                       {r.name}
@@ -136,10 +171,33 @@ export default function Testimonials() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="flex gap-0.5 text-gold" aria-label="5 étoiles sur 5">
+                <div className="flex items-center gap-2 mb-4 relative">
+                  <div
+                    className="flex gap-0.5 text-gold"
+                    aria-label="5 étoiles sur 5"
+                  >
                     {Array.from({ length: 5 }).map((_, idx) => (
-                      <StarIcon key={idx} size={13} />
+                      <motion.span
+                        key={idx}
+                        initial={
+                          shouldReduceMotion ? false : { opacity: 0, scale: 0.4 }
+                        }
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true, amount: 0.4 }}
+                        transition={{
+                          duration: 0.35,
+                          delay: i * 0.08 + 0.25 + idx * 0.08,
+                          ease: [0.23, 1, 0.32, 1],
+                        }}
+                        whileHover={
+                          shouldReduceMotion
+                            ? undefined
+                            : { scale: 1.25, transition: { delay: idx * 0.04 } }
+                        }
+                        style={{ display: "inline-flex" }}
+                      >
+                        <StarIcon size={13} />
+                      </motion.span>
                     ))}
                   </div>
                   <span className="text-[10px] text-muted-dark tracking-[0.1em] uppercase ml-1">

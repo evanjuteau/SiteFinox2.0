@@ -1,5 +1,6 @@
-import Reveal from "@/components/ui/Reveal";
 import Link from "next/link";
+import Reveal from "@/components/ui/Reveal";
+import TiltCard from "@/components/ui/TiltCard";
 import { articles } from "@/lib/articles";
 
 interface ChroniqueProps {
@@ -47,45 +48,50 @@ export default function Chronique({ limit = 6, compact = false }: ChroniqueProps
         <div className="grid grid-cols-3 gap-px bg-gold/10 max-[980px]:grid-cols-1">
           {displayed.map((article, i) => (
             <Reveal key={article.slug} delay={i * 0.06}>
-              <Link
-                href={`/chronique/${article.slug}`}
-                data-hover
-                className="bg-navy p-11 px-9 block transition-all duration-300 relative overflow-hidden group no-underline h-full hover:bg-navy-100"
-              >
-                <div
-                  className="absolute top-0 left-0 right-0 h-0.5 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"
-                  aria-hidden="true"
-                  style={{
-                    background:
-                      "linear-gradient(90deg, var(--gold), var(--gold-dark))",
-                  }}
-                />
-                <p className="text-[9px] tracking-[0.22em] uppercase text-gold mb-5 flex items-center gap-2 before:content-[''] before:w-5 before:h-px before:bg-gold">
-                  <span>{article.tag}</span>
-                </p>
-                <h3 className="font-serif text-[20px] font-bold text-cream leading-[1.3] mb-4">
-                  {article.title}
-                </h3>
-                <p className="text-[13.5px] text-muted leading-[1.75] mb-6">
-                  {article.excerpt}
-                </p>
-                <p className="font-serif text-[14px] italic text-cream-dim pt-5 border-t border-gold/10 leading-[1.5]">
-                  {article.question}
-                </p>
-                <div className="mt-5 flex items-center justify-between">
-                  <div className="flex flex-col">
-                    <span className="text-[10px] tracking-[0.06em] text-muted">
-                      {article.author}
-                    </span>
-                    <span className="text-[9px] tracking-[0.14em] uppercase text-muted-dark mt-0.5">
-                      {article.readTime} · {article.date}
+              <TiltCard className="h-full" max={4} perspective={1500}>
+                <Link
+                  href={`/chronique/${article.slug}`}
+                  data-hover
+                  className="bg-navy p-11 px-9 block transition-all duration-300 relative overflow-hidden group no-underline h-full hover:bg-navy-100"
+                >
+                  <div
+                    className="absolute top-0 left-0 right-0 h-0.5 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"
+                    aria-hidden="true"
+                    style={{
+                      background:
+                        "linear-gradient(90deg, var(--gold), var(--gold-dark))",
+                    }}
+                  />
+                  <p className="text-[9px] tracking-[0.22em] uppercase text-gold mb-5 flex items-center gap-2 before:content-[''] before:w-5 before:h-px before:bg-gold">
+                    <span>{article.tag}</span>
+                  </p>
+                  <h3 className="font-serif text-[20px] font-bold text-cream leading-[1.3] mb-4">
+                    {article.title}
+                  </h3>
+                  <p className="text-[13.5px] text-muted leading-[1.75] mb-6">
+                    {article.excerpt}
+                  </p>
+                  <p className="font-serif text-[14px] italic text-cream-dim pt-5 border-t border-gold/10 leading-[1.5]">
+                    {article.question}
+                  </p>
+                  <div className="mt-5 flex items-center justify-between">
+                    <div className="flex flex-col">
+                      <span className="text-[10px] tracking-[0.06em] text-muted">
+                        {article.author}
+                      </span>
+                      <span className="text-[9px] tracking-[0.14em] uppercase text-muted-dark mt-0.5">
+                        {article.readTime} · {article.date}
+                      </span>
+                    </div>
+                    <span
+                      className="text-lg text-gold opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all"
+                      aria-hidden="true"
+                    >
+                      →
                     </span>
                   </div>
-                  <span className="text-lg text-gold opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" aria-hidden="true">
-                    →
-                  </span>
-                </div>
-              </Link>
+                </Link>
+              </TiltCard>
             </Reveal>
           ))}
         </div>
@@ -98,7 +104,17 @@ export default function Chronique({ limit = 6, compact = false }: ChroniqueProps
                 className="inline-flex items-center gap-3 text-[11px] tracking-[0.18em] uppercase text-cream hover:text-gold transition-colors no-underline border-b border-gold/30 hover:border-gold pb-1"
               >
                 <span>Voir les {articles.length} articles</span>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
                   <path d="M5 12h14" />
                   <path d="m12 5 7 7-7 7" />
                 </svg>

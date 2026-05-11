@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
+import { motion, useReducedMotion } from "framer-motion";
 import { articles } from "@/lib/articles";
 import {
   LinkedInIcon,
@@ -60,6 +63,7 @@ const navLinks = [
 
 export default function Footer() {
   const recentArticles = articles.slice(0, 3);
+  const shouldReduceMotion = useReducedMotion() ?? false;
 
   return (
     <footer className="bg-navy border-t border-gold/15 px-16 py-20 max-[980px]:px-6 max-[980px]:py-14 relative overflow-hidden">
@@ -91,9 +95,21 @@ export default function Footer() {
               href={BOOKING_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-gold inline-flex items-center gap-3"
+              className="btn-gold inline-flex items-center gap-3 relative overflow-hidden"
             >
-              <span>Choisir mon créneau</span>
+              {!shouldReduceMotion && (
+                <span
+                  aria-hidden="true"
+                  className="absolute inset-0 pointer-events-none"
+                  style={{
+                    background:
+                      "linear-gradient(120deg, transparent 35%, rgba(255,228,150,0.35) 50%, transparent 65%)",
+                    backgroundSize: "200% 100%",
+                    animation: "gold-sweep 5s ease-in-out infinite",
+                  }}
+                />
+              )}
+              <span className="relative">Choisir mon créneau</span>
               <svg
                 width="14"
                 height="14"
@@ -104,6 +120,7 @@ export default function Footer() {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 aria-hidden="true"
+                className="relative"
               >
                 <path d="M5 12h14" />
                 <path d="m12 5 7 7-7 7" />
@@ -129,17 +146,30 @@ export default function Footer() {
             </p>
 
             <div className="flex gap-2 mt-2 flex-wrap">
-              {socials.map(({ name, href, Icon }) => (
-                <a
+              {socials.map(({ name, href, Icon }, i) => (
+                <motion.a
                   key={name}
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={name}
-                  className="w-10 h-10 flex items-center justify-center border border-gold/15 text-muted hover:text-navy hover:bg-gold hover:border-gold transition-all"
+                  initial={
+                    shouldReduceMotion ? false : { opacity: 0, y: 10 }
+                  }
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.4 }}
+                  transition={{
+                    duration: 0.4,
+                    delay: i * 0.05,
+                    ease: [0.23, 1, 0.32, 1],
+                  }}
+                  whileHover={
+                    shouldReduceMotion ? undefined : { y: -3, scale: 1.04 }
+                  }
+                  className="w-10 h-10 flex items-center justify-center border border-gold/15 text-muted hover:text-navy hover:bg-gold hover:border-gold transition-colors relative overflow-hidden"
                 >
                   <Icon size={16} />
-                </a>
+                </motion.a>
               ))}
             </div>
           </div>
@@ -212,10 +242,32 @@ export default function Footer() {
                 Mascouche, QC J7K 3C1
                 <br />
                 <span className="text-[11px] tracking-[0.1em] uppercase text-gold/70 inline-flex items-center gap-1.5 mt-1.5">
-                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                    <path d="M20 10c0 7-8 12-8 12s-8-5-8-12a8 8 0 0 1 16 0Z" />
-                    <circle cx="12" cy="10" r="3" />
-                  </svg>
+                  <motion.span
+                    aria-hidden="true"
+                    animate={
+                      shouldReduceMotion ? undefined : { scale: [1, 1.18, 1] }
+                    }
+                    transition={
+                      shouldReduceMotion
+                        ? undefined
+                        : { duration: 2.4, repeat: Infinity, ease: "easeInOut" }
+                    }
+                    className="inline-flex"
+                  >
+                    <svg
+                      width="11"
+                      height="11"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M20 10c0 7-8 12-8 12s-8-5-8-12a8 8 0 0 1 16 0Z" />
+                      <circle cx="12" cy="10" r="3" />
+                    </svg>
+                  </motion.span>
                   Voir sur Google Maps
                 </span>
               </a>
